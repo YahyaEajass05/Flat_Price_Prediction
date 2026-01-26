@@ -13,8 +13,8 @@ import logging
 from datetime import datetime
 import sys
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add parent directory to path so we can import src
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.preprocessing import DataPreprocessor
 from src.config import MODELS_DIR
@@ -62,11 +62,18 @@ def load_models():
         
         # Load metadata
         import json
-        metadata_path = MODELS_DIR / 'model_metadata.json'
+        metadata_path = MODELS_DIR / 'metadata' / 'model_metadata.json'
         if metadata_path.exists():
             with open(metadata_path, 'r') as f:
                 metadata = json.load(f)
             logger.info("✓ Metadata loaded successfully")
+        else:
+            # Try old location for backward compatibility
+            metadata_path_old = MODELS_DIR / 'model_metadata.json'
+            if metadata_path_old.exists():
+                with open(metadata_path_old, 'r') as f:
+                    metadata = json.load(f)
+                logger.info("✓ Metadata loaded from old location")
         
         return True
         
@@ -522,5 +529,5 @@ if __name__ == '__main__':
         app.run(debug=True, host='0.0.0.0', port=5000)
     else:
         print("✗ Failed to load models. Please train models first:")
-        print("  python train_streamlined.py")
+        print("  python scripts/train.py")
         sys.exit(1)

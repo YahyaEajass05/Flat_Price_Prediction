@@ -1,0 +1,327 @@
+================================================================================
+FLAT PRICE PREDICTION API - ENDPOINTS DOCUMENTATION
+================================================================================
+
+API Version: 1.0.0
+Base URL: http://localhost:5000
+Framework: Flask with CORS enabled
+
+================================================================================
+AVAILABLE ENDPOINTS
+================================================================================
+
+1. GET /
+   --------
+   Description: API home page with service information
+   
+   Response:
+   {
+       "service": "Flat Price Prediction API",
+       "version": "1.0.0",
+       "model": "Ensemble (XGBoost + LightGBM + CatBoost)",
+       "accuracy": "99.90%",
+       "status": "operational",
+       "endpoints": { ... list of all endpoints ... }
+   }
+
+2. GET /api/health
+   ----------------
+   Description: Health check endpoint to verify API is running
+   
+   Response:
+   {
+       "status": "healthy",
+       "timestamp": "2026-01-26T20:30:00",
+       "models_loaded": true,
+       "preprocessor_loaded": true
+   }
+
+3. GET /api/model/info
+   --------------------
+   Description: Get detailed model information and accuracy metrics
+   
+   Response:
+   {
+       "model_type": "Ensemble",
+       "components": ["XGBoost", "LightGBM", "CatBoost"],
+       "accuracy": "99.90%",
+       "average_error": "152,666 RUB (1.00%)",
+       "training_date": "...",
+       "dataset_size": "...",
+       "features": "...",
+       "prediction_accuracy": {
+           "within_5_percent": "99.81%",
+           "within_10_percent": "99.98%",
+           "within_15_percent": "99.99%"
+       }
+   }
+
+4. POST /api/predict
+   ------------------
+   Description: Predict price for a single property
+   Content-Type: application/json
+   
+   Request Body:
+   {
+       "kitchen_area": 10.0,
+       "bath_area": 5.0,
+       "other_area": 50.5,
+       "gas": "Yes",
+       "hot_water": "Yes",
+       "central_heating": "Yes",
+       "extra_area": 10.0,
+       "extra_area_count": 1,
+       "year": 2010,
+       "ceil_height": 2.7,
+       "floor_max": 10,
+       "floor": 5,
+       "total_area": 65.0,
+       "bath_count": 1,
+       "extra_area_type_name": "balcony",
+       "district_name": "Centralnyj",
+       "rooms_count": 3
+   }
+   
+   Response:
+   {
+       "predicted_price": 16500000.00,
+       "confidence_interval": {
+           "lower": 16335000.00,
+           "upper": 16665000.00
+       },
+       "currency": "RUB",
+       "model_accuracy": "99.90%",
+       "input_summary": {
+           "total_area": 65.0,
+           "district": "Centralnyj",
+           "rooms": 3,
+           "year": 2010
+       },
+       "status": "success",
+       "timestamp": "2026-01-26T20:30:00"
+   }
+
+5. POST /api/predict/batch
+   ------------------------
+   Description: Predict prices for multiple properties (max 1000)
+   Content-Type: application/json
+   
+   Request Body:
+   {
+       "properties": [
+           { ... property 1 data ... },
+           { ... property 2 data ... },
+           { ... property 3 data ... }
+       ]
+   }
+   
+   Response:
+   {
+       "status": "completed",
+       "summary": {
+           "total": 3,
+           "successful": 3,
+           "failed": 0
+       },
+       "results": [
+           {
+               "index": 0,
+               "predicted_price": 16500000.00,
+               "confidence_interval": { ... },
+               "status": "success"
+           },
+           ...
+       ],
+       "timestamp": "2026-01-26T20:30:00"
+   }
+
+6. GET /api/docs
+   --------------
+   Description: Complete API documentation
+   
+   Response: Full API documentation with all endpoints, parameters, and examples
+
+================================================================================
+REQUIRED FIELDS FOR PREDICTION
+================================================================================
+
+Numerical Fields:
+- kitchen_area (float): Kitchen area in m² (required)
+- bath_area (float): Bathroom area in m² (required)
+- other_area (float): Other area in m² (required)
+- extra_area (float): Extra area (balcony/loggia) in m² (required)
+- extra_area_count (int): Number of extra areas (required)
+- year (int): Year of construction (1800-2025) (required)
+- ceil_height (float): Ceiling height in meters (1.5-6.0) (required)
+- floor_max (int): Maximum floors in building (required)
+- floor (int): Floor number (required)
+- total_area (float): Total area in m² (10-500) (required)
+- bath_count (int): Number of bathrooms (required)
+- rooms_count (int): Number of rooms (0-10) (required)
+
+Categorical Fields:
+- gas (string): "Yes" or "No" (required)
+- hot_water (string): "Yes" or "No" (required)
+- central_heating (string): "Yes" or "No" (required)
+- district_name (string): One of:
+  * Centralnyj
+  * Petrogradskij
+  * Moskovskij
+  * Nevskij
+  * Krasnoselskij
+  * Vyborgskij
+  * Kirovskij
+- extra_area_type_name (string): "balcony" or "loggia" (required)
+
+================================================================================
+VALIDATION RULES
+================================================================================
+
+- total_area: Must be between 10 and 500 m²
+- year: Must be between 1800 and 2025
+- ceil_height: Must be between 1.5 and 6.0 meters
+- rooms_count: Must be between 0 and 10
+- All categorical fields must match exact values (case-sensitive)
+- All required fields must be present
+
+================================================================================
+ERROR RESPONSES
+================================================================================
+
+400 Bad Request:
+{
+    "error": "Missing required fields: ...",
+    "status": "error"
+}
+
+404 Not Found:
+{
+    "error": "Endpoint not found",
+    "status": "error",
+    "available_endpoints": [ ... ]
+}
+
+500 Internal Server Error:
+{
+    "error": "Internal server error",
+    "status": "error"
+}
+
+================================================================================
+HOW TO START THE API
+================================================================================
+
+1. Make sure models are trained:
+   python scripts/train.py
+
+2. Start the API server:
+   python api/app.py
+
+3. The API will be available at:
+   http://localhost:5000
+
+4. Test with curl:
+   curl http://localhost:5000/api/health
+
+================================================================================
+EXAMPLE CURL COMMANDS
+================================================================================
+
+1. Health Check:
+curl http://localhost:5000/api/health
+
+2. Model Info:
+curl http://localhost:5000/api/model/info
+
+3. Single Prediction:
+curl -X POST http://localhost:5000/api/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "kitchen_area": 10.0,
+    "bath_area": 5.0,
+    "other_area": 50.5,
+    "gas": "Yes",
+    "hot_water": "Yes",
+    "central_heating": "Yes",
+    "extra_area": 10.0,
+    "extra_area_count": 1,
+    "year": 2010,
+    "ceil_height": 2.7,
+    "floor_max": 10,
+    "floor": 5,
+    "total_area": 65.0,
+    "bath_count": 1,
+    "extra_area_type_name": "balcony",
+    "district_name": "Centralnyj",
+    "rooms_count": 3
+  }'
+
+4. Batch Prediction:
+curl -X POST http://localhost:5000/api/predict/batch \
+  -H "Content-Type: application/json" \
+  -d '{
+    "properties": [
+      { ... property 1 ... },
+      { ... property 2 ... }
+    ]
+  }'
+
+================================================================================
+PYTHON CLIENT EXAMPLE
+================================================================================
+
+import requests
+
+# Health check
+response = requests.get('http://localhost:5000/api/health')
+print(response.json())
+
+# Single prediction
+data = {
+    "kitchen_area": 10.0,
+    "bath_area": 5.0,
+    "other_area": 50.5,
+    "gas": "Yes",
+    "hot_water": "Yes",
+    "central_heating": "Yes",
+    "extra_area": 10.0,
+    "extra_area_count": 1,
+    "year": 2010,
+    "ceil_height": 2.7,
+    "floor_max": 10,
+    "floor": 5,
+    "total_area": 65.0,
+    "bath_count": 1,
+    "extra_area_type_name": "balcony",
+    "district_name": "Centralnyj",
+    "rooms_count": 3
+}
+
+response = requests.post('http://localhost:5000/api/predict', json=data)
+prediction = response.json()
+print(f"Predicted price: {prediction['predicted_price']} RUB")
+
+================================================================================
+ISSUES FIXED
+================================================================================
+
+✅ Fixed sys.path to point to project root (was pointing to api/ folder)
+✅ Updated metadata path to use models/metadata/ folder
+✅ Fixed training script reference (train_streamlined.py -> scripts/train.py)
+✅ Added backward compatibility for old metadata location
+
+================================================================================
+NOTES
+================================================================================
+
+- API runs on port 5000 by default
+- CORS is enabled for all routes
+- Debug mode is enabled (turn off in production)
+- Models are loaded once at startup for performance
+- All endpoints return JSON format
+- Timestamps are in ISO 8601 format
+
+================================================================================
+Created: January 26, 2026
+Status: ✅ TESTED AND WORKING
+================================================================================
