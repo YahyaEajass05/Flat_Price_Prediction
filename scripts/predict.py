@@ -10,8 +10,8 @@ import pandas as pd
 import joblib
 import numpy as np
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add parent directory to path so we can import src
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import MODELS_DIR
 from src.preprocessing import DataPreprocessor

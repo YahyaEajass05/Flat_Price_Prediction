@@ -581,8 +581,8 @@ class DataPreprocessor:
         import joblib
         self.label_encoders = joblib.load(path)
         
-        # Load feature names from JSON file
-        feature_names_path = path.parent / 'feature_names.json'
+        # Load feature names from JSON file in metadata folder
+        feature_names_path = path.parent / 'metadata' / 'feature_names.json'
         if feature_names_path.exists():
             import json
             with open(feature_names_path, 'r') as f:
@@ -590,7 +590,16 @@ class DataPreprocessor:
                 self.feature_names = data.get('features', [])
             logger.info(f"Loaded {len(self.feature_names)} feature names")
         else:
-            logger.warning("feature_names.json not found - will be set during transform")
+            # Try old location for backward compatibility
+            feature_names_path_old = path.parent / 'feature_names.json'
+            if feature_names_path_old.exists():
+                import json
+                with open(feature_names_path_old, 'r') as f:
+                    data = json.load(f)
+                    self.feature_names = data.get('features', [])
+                logger.info(f"Loaded {len(self.feature_names)} feature names from old location")
+            else:
+                logger.warning("feature_names.json not found - will be set during transform")
         
         self.is_fitted = True
         logger.info(f"Loaded encoders from {path}")

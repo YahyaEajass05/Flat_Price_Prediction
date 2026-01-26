@@ -9,8 +9,8 @@ from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add parent directory to path so we can import src
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import (
     TRAIN_DATA_PATH, TEST_SIZE, VALIDATION_SIZE, TARGET_COLUMN,

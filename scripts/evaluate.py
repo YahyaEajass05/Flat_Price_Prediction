@@ -9,8 +9,8 @@ from pathlib import Path
 import pandas as pd
 import joblib
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add parent directory to path so we can import src
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.config import MODELS_DIR, RESULTS_DIR, TEST_DATA_PATH
 from src.preprocessing import DataPreprocessor

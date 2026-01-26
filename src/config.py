@@ -11,18 +11,30 @@ from pathlib import Path
 # ============================================================================
 BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = BASE_DIR / "data"
+DATA_RAW_DIR = DATA_DIR / "raw"
+DATA_EXAMPLES_DIR = DATA_DIR / "examples"
 MODELS_DIR = BASE_DIR / "models"
+MODELS_METADATA_DIR = MODELS_DIR / "metadata"
 LOGS_DIR = BASE_DIR / "logs"
 RESULTS_DIR = BASE_DIR / "results"
+RESULTS_PREDICTIONS_DIR = RESULTS_DIR / "predictions"
+RESULTS_VISUALIZATIONS_DIR = RESULTS_DIR / "visualizations"
+RESULTS_REPORTS_DIR = RESULTS_DIR / "reports"
 
 # Ensure directories exist
+DATA_RAW_DIR.mkdir(parents=True, exist_ok=True)
+DATA_EXAMPLES_DIR.mkdir(parents=True, exist_ok=True)
 MODELS_DIR.mkdir(exist_ok=True)
+MODELS_METADATA_DIR.mkdir(exist_ok=True)
 LOGS_DIR.mkdir(exist_ok=True)
 RESULTS_DIR.mkdir(exist_ok=True)
+RESULTS_PREDICTIONS_DIR.mkdir(exist_ok=True)
+RESULTS_VISUALIZATIONS_DIR.mkdir(exist_ok=True)
+RESULTS_REPORTS_DIR.mkdir(exist_ok=True)
 
 # Data files
-TRAIN_DATA_PATH = DATA_DIR / "data.csv"
-TEST_DATA_PATH = DATA_DIR / "test.csv"
+TRAIN_DATA_PATH = DATA_RAW_DIR / "data.csv"
+TEST_DATA_PATH = DATA_RAW_DIR / "test.csv"
 
 # ============================================================================
 # DATA CONFIGURATION

@@ -16,9 +16,9 @@ warnings.filterwarnings('ignore')
 plt.style.use('seaborn-v0_8-darkgrid')
 sns.set_palette("husl")
 
-# Create EDA directory
-EDA_DIR = Path('eda_results')
-EDA_DIR.mkdir(exist_ok=True)
+# Create EDA directory in results/visualizations/eda
+EDA_DIR = Path(__file__).parent.parent / 'results' / 'visualizations' / 'eda'
+EDA_DIR.mkdir(parents=True, exist_ok=True)
 
 print("="*80)
 print("EXPLORATORY DATA ANALYSIS - FLAT PRICE PREDICTION")
@@ -26,7 +26,9 @@ print("="*80)
 
 # Load data
 print("\n📂 Loading data...")
-df = pd.read_csv('data/data.csv')
+# Update path to use new structure
+data_path = Path(__file__).parent.parent / 'data' / 'raw' / 'data.csv'
+df = pd.read_csv(data_path)
 print(f"✓ Loaded {len(df):,} records with {len(df.columns)} columns")
 
 # ============================================================================
