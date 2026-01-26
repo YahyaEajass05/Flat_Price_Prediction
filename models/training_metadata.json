@@ -1,0 +1,28 @@
+{
+    "best_model": "lightgbm",
+    "best_metrics": {
+        "model": "lightgbm",
+        "r2_score": 0.9981531102104096,
+        "rmse": 255421.63443574632,
+        "mae": 197133.81516568977,
+        "mape": 1.2758734493685573,
+        "mse": 65240211337.828026,
+        "within_5_pct": 99.125,
+        "within_10_pct": 99.965,
+        "within_15_pct": 100.0,
+        "within_20_pct": 100.0,
+        "mean_error": 1179.7468289089998,
+        "std_error": 255418.9099014552,
+        "max_error": 2298459.4805765897,
+        "median_error": 162433.1316341441,
+        "explained_variance": 0.9981531496110481,
+        "adj_r2_score": 0.9981530178566848
+    },
+    "training_date": "2026-01-26T18:42:54.001051",
+    "dataset_size": 100000,
+    "n_features": 33,
+    "test_size": 0.2,
+    "models_trained": [
+        "lightgbm"
+    ]
+}

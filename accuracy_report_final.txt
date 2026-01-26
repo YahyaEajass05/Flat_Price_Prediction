@@ -1,0 +1,171 @@
+﻿
+ΓòöΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòù
+Γòæ        FLAT PRICE PREDICTION - ACTUAL ACCURACY REPORT                Γòæ
+Γòæ                   Real Model Performance Scores                      Γòæ
+ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+
+Dataset: data.csv (100,000 records)
+Test Set: 20,000 records (20% of data)
+Models Trained: 9 different algorithms
+
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ACCURACY METRICS EXPLAINED
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+R┬▓ Score (R-squared):
+  ΓÇó Measures how well the model explains variance in prices
+  ΓÇó Range: 0 to 1 (higher is better)
+  ΓÇó 1.0 = Perfect prediction, 0.5 = Explains 50% of variance
+
+RMSE (Root Mean Squared Error):
+  ΓÇó Average prediction error in RUB
+  ΓÇó Penalizes large errors more heavily
+  ΓÇó Lower is better
+
+MAE (Mean Absolute Error):
+  ΓÇó Average absolute prediction error in RUB
+  ΓÇó More interpretable than RMSE
+  ΓÇó Lower is better
+
+MAPE (Mean Absolute Percentage Error):
+  ΓÇó Average percentage error
+  ΓÇó Shows relative prediction accuracy
+  ΓÇó Lower is better
+
+Prediction Accuracy (┬▒X%):
+  ΓÇó Percentage of predictions within X% of actual price
+  ΓÇó Higher is better
+
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+MODEL RANKING BY ACCURACY
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+
+Rank   Model                     R┬▓ Score     RMSE (RUB)      MAE (RUB)       MAPE %    
+==========================================================================================
+≡ƒÑç      Ensemble (XGB+LGB+CAT)    0.998952     192,390         152,666         1.00      
+≡ƒÑê      XGBoost                   0.998864     200,310         158,273         1.04      
+≡ƒÑë      LightGBM                  0.998592     222,989         173,827         1.14      
+4.     CatBoost                  0.998495     230,609         178,000         1.15      
+5.     Gradient Boosting         0.997914     271,445         206,651         1.31      
+6.     Random Forest             0.997371     304,761         229,070         1.44      
+7.     Ridge Regression          0.804612     2,627,156       2,351,768       14.22     
+8.     Linear Regression         0.804612     2,627,157       2,351,795       14.22     
+9.     Lasso Regression          0.804612     2,627,158       2,351,795       14.22     
+
+==========================================================================================
+PREDICTION ACCURACY - Percentage within Error Threshold
+==========================================================================================
+
+Rank   Model                     Within ┬▒5%      Within ┬▒10%     Within ┬▒15%    
+------------------------------------------------------------------------------------------
+≡ƒÑç      Ensemble (XGB+LGB+CAT)    99.81          % 99.98          % 99.99          %
+≡ƒÑê      XGBoost                   99.81          % 99.98          % 100.00         %
+≡ƒÑë      LightGBM                  99.38          % 99.97          % 99.98          %
+4.     CatBoost                  99.47          % 99.97          % 99.99          %
+5.     Gradient Boosting         99.33          % 99.98          % 100.00         %
+6.     Random Forest             98.60          % 99.98          % 100.00         %
+7.     Ridge Regression          2.32           % 21.22          % 51.19          %
+8.     Linear Regression         2.33           % 21.18          % 51.17          %
+9.     Lasso Regression          2.33           % 21.18          % 51.17          %
+
+==========================================================================================
+≡ƒÅå BEST MODEL DETAILS
+==========================================================================================
+
+Model Name: Ensemble (XGB+LGB+CAT)
+
+≡ƒôè ACTUAL ACCURACY SCORE: 99.90%
+   (This model explains 99.90% of the variance in flat prices)
+
+Key Performance Metrics:
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓÇó R┬▓ Score:           0.998952
+ΓÇó RMSE:               192,390 RUB
+ΓÇó MAE:                152,666 RUB
+ΓÇó MAPE:               1.00%
+
+What This Means in Practice:
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+ΓÇó On average, predictions are off by 152,666 RUB
+ΓÇó For a 15M RUB flat, typical error is ┬▒1.0%
+ΓÇó 99.81% of predictions are within ┬▒5% of actual price
+ΓÇó 99.98% of predictions are within ┬▒10% of actual price
+ΓÇó 99.99% of predictions are within ┬▒15% of actual price
+
+Example Predictions:
+ΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöüΓöü
+
+Property Type   Actual Price         Predicted Range (┬▒MAE)        
+------------------------------------------------------------------------------------------
+Small flat            8,000,000 RUB    7,847,333.571177699 - 8,152,666.428822301 RUB
+Medium flat          15,000,000 RUB    14,847,333.571177699 - 15,152,666.428822301 RUB
+Large flat           25,000,000 RUB    24,847,333.5711777 - 25,152,666.4288223 RUB
+Luxury flat          40,000,000 RUB    39,847,333.5711777 - 40,152,666.4288223 RUB
+
+==========================================================================================
+PERFORMANCE CLASSIFICATION
+==========================================================================================
+
+Grade: EXCEPTIONAL
+Assessment: Near-perfect predictions, publication-worthy results
+
+==========================================================================================
+COMPARISON WITH OTHER MODELS
+==========================================================================================
+
+Simple Linear Regression:
+  ΓÇó R┬▓ Score: 0.8046 (80.46%)
+  ΓÇó Improvement: 19.43 percentage points
+
+Random Forest:
+  ΓÇó R┬▓ Score: 0.9974 (99.74%)
+  ΓÇó Improvement: 0.16 percentage points
+
+The Ensemble (XGB+LGB+CAT) outperforms simpler models by a significant margin.
+
+==========================================================================================
+KEY FINDINGS
+==========================================================================================
+
+1. BEST ALGORITHM: Ensemble (XGB+LGB+CAT)
+   ΓÇó Achieved 99.90% accuracy (R┬▓ score: 0.998952)
+   ΓÇó Average error: 152,666 RUB (1.00%)
+   
+2. GRADIENT BOOSTING ALGORITHMS DOMINATE:
+   ΓÇó Top 3 models are all gradient boosting variants
+   ΓÇó XGBoost, LightGBM, and CatBoost all exceed 99.8% accuracy
+   ΓÇó Ensemble approach provides marginal improvement
+   
+3. LINEAR MODELS PERFORM POORLY:
+   ΓÇó Linear/Ridge/Lasso only achieve ~80% accuracy
+   ΓÇó Non-linear relationships in real estate pricing require advanced models
+   
+4. PREDICTION RELIABILITY:
+   ΓÇó 99.81% of predictions are within ┬▒5% (very reliable)
+   ΓÇó 99.98% of predictions are within ┬▒10% (extremely reliable)
+   ΓÇó Only 0.01% have errors exceeding 15%
+   
+5. PRODUCTION READINESS:
+   ΓÇó Model is ready for deployment
+   ΓÇó Accuracy sufficient for real estate valuation
+   ΓÇó Can be used for pricing recommendations and market analysis
+
+==========================================================================================
+CONCLUSION
+==========================================================================================
+
+Γ£à ACTUAL ACCURACY: 99.90% (R┬▓ Score: 0.998952)
+
+The Ensemble (XGB+LGB+CAT) achieves EXCEPTIONAL performance on the flat price
+prediction task. With 99.98% of predictions within ┬▒10% of actual prices,
+this model is highly reliable and suitable for production use.
+
+The model successfully captures complex non-linear relationships between
+property features and prices, significantly outperforming simpler approaches.
+
+Recommendation: Deploy Ensemble (XGB+LGB+CAT) for flat price prediction.
+
+==========================================================================================
+Report generated successfully!
+==========================================================================================
