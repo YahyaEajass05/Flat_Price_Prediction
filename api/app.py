@@ -12,6 +12,10 @@ from pathlib import Path
 import logging
 from datetime import datetime
 import sys
+import warnings
+
+# Suppress sklearn feature name warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='sklearn')
 
 # Add parent directory to path so we can import src
 sys.path.insert(0, str(Path(__file__).parent.parent))

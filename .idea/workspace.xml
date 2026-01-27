@@ -22,49 +22,8 @@
       <change afterPath="$PROJECT_DIR$/../online practical/.vscode/settings.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../online practical/01.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../online practical/DT_titanic.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDA_SUMMARY.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FINAL_ACCURACY_REPORT.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PROJECT_COMPLETION.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accuracy_finder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accuracy_report.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accuracy_report.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accuracy_report_final.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accuracy_results.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api_test_client.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/data.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/solution_example.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/solution_example_full.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/test.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_analysis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/01_price_distribution.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/02_numerical_distributions.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/03_correlation_heatmap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/04_price_vs_features.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/05_price_by_categorical.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/06_avg_price_by_categorical.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/07_outlier_detection.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/08_feature_relationships.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eda_results/09_district_analysis.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/feature_cols.pkl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/feature_names.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/model_metadata.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/training_metadata.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/predict.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prediction_debug.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/catboost_predictions.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/ensemble_error_analysis.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/ensemble_predictions.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/ensemble_residuals.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/lightgbm_predictions.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/model_comparison.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/xgboost_predictions.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_quick_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_predictions.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/visualizations/eda/02_numerical_distributions.png" beforeDir="false" afterPath="$PROJECT_DIR$/results/visualizations/eda/02_numerical_distributions.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,27 +41,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "D:/Python Projects/Flat_Price_Prediction",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Python Projects/Flat_Price_Prediction&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Python Projects\Flat_Price_Prediction\data" />
@@ -135,7 +94,9 @@
       <workItem from="1769420282181" duration="612000" />
       <workItem from="1769421419219" duration="79000" />
       <workItem from="1769421501803" duration="3602000" />
-      <workItem from="1769432693344" duration="5840000" />
+      <workItem from="1769432693344" duration="6827000" />
+      <workItem from="1769440192898" duration="5000" />
+      <workItem from="1769507573737" duration="367000" />
     </task>
     <servers />
   </component>

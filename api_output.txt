@@ -1,0 +1,21 @@
+======================================================================
+FLAT PRICE PREDICTION API
+======================================================================
+✓ Models loaded successfully
+✓ Model accuracy: 99.88%
+
+======================================================================
+Starting Flask API server...
+======================================================================
+
+API Endpoints:
+  • Home:           http://localhost:5000/
+  • Predict:        http://localhost:5000/api/predict
+  • Batch Predict:  http://localhost:5000/api/predict/batch
+  • Health Check:   http://localhost:5000/api/health
+  • Model Info:     http://localhost:5000/api/model/info
+  • Documentation:  http://localhost:5000/api/docs
+
+======================================================================
+ * Serving Flask app 'app'
+ * Debug mode: on

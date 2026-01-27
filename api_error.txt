@@ -1,0 +1,62 @@
+2026-01-27 15:37:04,364 - __main__ - INFO - Loading models...
+2026-01-27 15:37:04,684 - __main__ - INFO - ✓ Models loaded successfully
+2026-01-27 15:37:04,686 - src.preprocessing - INFO - Loaded 33 feature names
+2026-01-27 15:37:04,687 - src.preprocessing - INFO - Loaded encoders from D:\Python Projects\Flat_Price_Prediction\models\label_encoders.pkl
+2026-01-27 15:37:04,688 - __main__ - INFO - ✓ Preprocessor loaded successfully
+2026-01-27 15:37:04,689 - __main__ - INFO - ✓ Metadata loaded successfully
+2026-01-27 15:37:04,713 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.4:5000
+2026-01-27 15:37:04,713 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-01-27 15:37:04,714 - werkzeug - INFO -  * Restarting with stat
+2026-01-27 15:37:06,206 - __main__ - INFO - Loading models...
+2026-01-27 15:37:06,516 - __main__ - INFO - ✓ Models loaded successfully
+2026-01-27 15:37:06,519 - src.preprocessing - INFO - Loaded 33 feature names
+2026-01-27 15:37:06,519 - src.preprocessing - INFO - Loaded encoders from D:\Python Projects\Flat_Price_Prediction\models\label_encoders.pkl
+2026-01-27 15:37:06,519 - __main__ - INFO - ✓ Preprocessor loaded successfully
+2026-01-27 15:37:06,520 - __main__ - INFO - ✓ Metadata loaded successfully
+2026-01-27 15:37:06,533 - werkzeug - WARNING -  * Debugger is active!
+2026-01-27 15:37:06,536 - werkzeug - INFO -  * Debugger PIN: 697-901-720
+2026-01-27 15:39:13,904 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:13] "GET /api/health HTTP/1.1" 200 -
+2026-01-27 15:39:15,966 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:15] "GET / HTTP/1.1" 200 -
+2026-01-27 15:39:18,025 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:18] "GET /api/model/info HTTP/1.1" 200 -
+2026-01-27 15:39:20,071 - src.preprocessing - INFO - Transforming new data...
+2026-01-27 15:39:20,072 - src.preprocessing - INFO - Starting data cleaning...
+2026-01-27 15:39:20,074 - src.preprocessing - INFO - No missing values found
+2026-01-27 15:39:20,075 - src.preprocessing - INFO - Outlier removal disabled in config
+2026-01-27 15:39:20,079 - src.preprocessing - INFO - ✓ Data cleaning complete
+2026-01-27 15:39:20,080 - src.preprocessing - INFO - Starting feature engineering...
+2026-01-27 15:39:20,088 - src.preprocessing - INFO - ✓ Created 16 new features
+2026-01-27 15:39:20,093 - src.preprocessing - INFO - ✓ Transformation complete: 33 features
+2026-01-27 15:39:20,116 - __main__ - INFO - Prediction successful: 15636167.01 RUB
+2026-01-27 15:39:20,119 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:20] "POST /api/predict HTTP/1.1" 200 -
+2026-01-27 15:39:22,152 - src.preprocessing - INFO - Transforming new data...
+2026-01-27 15:39:22,153 - src.preprocessing - INFO - Starting data cleaning...
+2026-01-27 15:39:22,153 - src.preprocessing - INFO - No missing values found
+2026-01-27 15:39:22,155 - src.preprocessing - INFO - Outlier removal disabled in config
+2026-01-27 15:39:22,158 - src.preprocessing - INFO - ✓ Data cleaning complete
+2026-01-27 15:39:22,159 - src.preprocessing - INFO - Starting feature engineering...
+2026-01-27 15:39:22,165 - src.preprocessing - INFO - ✓ Created 16 new features
+2026-01-27 15:39:22,172 - src.preprocessing - INFO - ✓ Transformation complete: 33 features
+2026-01-27 15:39:22,196 - src.preprocessing - INFO - Transforming new data...
+2026-01-27 15:39:22,197 - src.preprocessing - INFO - Starting data cleaning...
+2026-01-27 15:39:22,198 - src.preprocessing - INFO - No missing values found
+2026-01-27 15:39:22,199 - src.preprocessing - INFO - Outlier removal disabled in config
+2026-01-27 15:39:22,202 - src.preprocessing - INFO - ✓ Data cleaning complete
+2026-01-27 15:39:22,203 - src.preprocessing - INFO - Starting feature engineering...
+2026-01-27 15:39:22,209 - src.preprocessing - INFO - ✓ Created 16 new features
+2026-01-27 15:39:22,213 - src.preprocessing - INFO - ✓ Transformation complete: 33 features
+2026-01-27 15:39:22,223 - src.preprocessing - INFO - Transforming new data...
+2026-01-27 15:39:22,223 - src.preprocessing - INFO - Starting data cleaning...
+2026-01-27 15:39:22,224 - src.preprocessing - INFO - No missing values found
+2026-01-27 15:39:22,226 - src.preprocessing - INFO - Outlier removal disabled in config
+2026-01-27 15:39:22,228 - src.preprocessing - INFO - ✓ Data cleaning complete
+2026-01-27 15:39:22,229 - src.preprocessing - INFO - Starting feature engineering...
+2026-01-27 15:39:22,235 - src.preprocessing - INFO - ✓ Created 16 new features
+2026-01-27 15:39:22,238 - src.preprocessing - INFO - ✓ Transformation complete: 33 features
+2026-01-27 15:39:22,246 - __main__ - INFO - Batch prediction: 3 successful, 0 failed
+2026-01-27 15:39:22,247 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:22] "POST /api/predict/batch HTTP/1.1" 200 -
+2026-01-27 15:39:24,295 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:24] "GET /api/docs HTTP/1.1" 200 -
+2026-01-27 15:39:26,338 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:26] "[31m[1mPOST /api/predict HTTP/1.1[0m" 400 -
+2026-01-27 15:39:28,371 - werkzeug - INFO - 127.0.0.1 - - [27/Jan/2026 15:39:28] "[31m[1mPOST /api/predict HTTP/1.1[0m" 400 -
