@@ -1,0 +1,526 @@
+================================================================================
+POWERSHELL SCRIPTS GUIDE
+Flat Price Prediction AI - Easy Launcher Scripts
+================================================================================
+
+Date: January 27, 2026
+Purpose: Easy-to-use PowerShell scripts for running the project
+
+================================================================================
+SCRIPTS OVERVIEW
+================================================================================
+
+Three PowerShell scripts have been created to make running your project easy:
+
+1. start_project.ps1   - Interactive menu (RECOMMENDED for beginners)
+2. run_api.ps1         - Start the Flask API server
+3. run_model.ps1       - Run model operations (train/evaluate/predict)
+
+================================================================================
+SCRIPT 1: start_project.ps1 (INTERACTIVE MENU)
+================================================================================
+
+DESCRIPTION:
+------------
+Interactive menu-driven interface for all project operations.
+Best for beginners or quick access to all features.
+
+HOW TO USE:
+-----------
+1. Open PowerShell in the project directory
+2. Run: .\start_project.ps1
+3. Choose from the menu:
+   [1] Start API Server
+   [2] Train Models
+   [3] Evaluate Models
+   [4] Make Predictions
+   [5] Run Complete Pipeline
+   [6] Test API Endpoints
+   [7] Run EDA Analysis
+   [8] View Project Status
+   [Q] Quit
+
+FEATURES:
+---------
+✓ User-friendly interactive menu
+✓ Automatic status checking
+✓ Colorful output
+✓ Error handling
+✓ No command-line arguments needed
+
+EXAMPLES:
+---------
+# Start the interactive menu
+.\start_project.ps1
+
+Then select option 1 to start API, option 2 to train, etc.
+
+================================================================================
+SCRIPT 2: run_api.ps1 (API SERVER)
+================================================================================
+
+DESCRIPTION:
+------------
+Starts the Flask API server with pre-flight checks and monitoring.
+Automatically validates all requirements before starting.
+
+HOW TO USE:
+-----------
+Basic usage:
+  .\run_api.ps1
+
+Advanced usage:
+  .\run_api.ps1 -Port 8080           # Use custom port
+  .\run_api.ps1 -Debug               # Enable debug mode
+  .\run_api.ps1 -SkipChecks          # Skip pre-flight checks
+
+PARAMETERS:
+-----------
+-Port <int>        Port number (default: 5000)
+-Debug             Enable Flask debug mode
+-SkipChecks        Skip pre-flight validation checks
+
+PRE-FLIGHT CHECKS:
+------------------
+Before starting, the script checks:
+1. ✓ Python installation
+2. ✓ Flask installation
+3. ✓ All model files exist
+4. ✓ API script exists
+5. ✓ Port is available
+6. ✓ All dependencies installed
+
+If any check fails, the script will:
+- Show clear error messages
+- Provide instructions to fix the issue
+- Attempt automatic fixes when possible
+
+WHAT IT DOES:
+-------------
+1. Validates environment and dependencies
+2. Checks model files are present
+3. Verifies port availability
+4. Starts Flask API server
+5. Displays access URLs
+6. Monitors server until stopped (Ctrl+C)
+
+OUTPUT:
+-------
+When started successfully:
+  ======================================================================
+  FLAT PRICE PREDICTION API
+  ======================================================================
+  ✓ Models loaded successfully
+  ✓ Model accuracy: 99.88%
+  
+  API Endpoints:
+    🏠 Home:           http://localhost:5000/
+    🔮 Predict:        http://localhost:5000/api/predict
+    📦 Batch Predict:  http://localhost:5000/api/predict/batch
+    💚 Health Check:   http://localhost:5000/api/health
+    📊 Model Info:     http://localhost:5000/api/model/info
+    📖 Documentation:  http://localhost:5000/api/docs
+
+EXAMPLES:
+---------
+# Start on default port (5000)
+.\run_api.ps1
+
+# Start on custom port
+.\run_api.ps1 -Port 8080
+
+# Start with debug mode
+.\run_api.ps1 -Debug
+
+# Quick start without checks (if you're sure everything is ready)
+.\run_api.ps1 -SkipChecks
+
+TROUBLESHOOTING:
+----------------
+Error: "Python not found"
+  Solution: Install Python 3.8 or higher
+
+Error: "Flask not installed"
+  Solution: Script will auto-install, or run: pip install flask flask-cors
+
+Error: "Port already in use"
+  Solution: Use a different port with -Port parameter
+
+Error: "Model files missing"
+  Solution: Train models first: .\run_model.ps1 -Operation train
+
+================================================================================
+SCRIPT 3: run_model.ps1 (MODEL OPERATIONS)
+================================================================================
+
+DESCRIPTION:
+------------
+Run various model operations: training, evaluation, and prediction.
+Command-line interface for power users.
+
+HOW TO USE:
+-----------
+Basic syntax:
+  .\run_model.ps1 -Operation <train|evaluate|predict|all>
+
+Advanced syntax:
+  .\run_model.ps1 -Operation evaluate -Model xgboost -SavePredictions
+  .\run_model.ps1 -Operation predict -Model ensemble -InputFile data\test.csv
+
+PARAMETERS:
+-----------
+Required:
+  -Operation <string>    Operation to perform
+                        Values: train, evaluate, predict, all
+
+Optional:
+  -Model <string>       Model to use (default: ensemble)
+                        Values: xgboost, lightgbm, catboost, ensemble
+  
+  -InputFile <string>   Input CSV for predictions (default: data\raw\test.csv)
+  
+  -OutputFile <string>  Output CSV for predictions (default: predictions.csv)
+  
+  -SavePredictions      Save predictions during evaluation
+
+OPERATIONS:
+-----------
+
+1. TRAIN
+   Purpose: Train all models (XGBoost, LightGBM, CatBoost)
+   Duration: 3-5 minutes
+   Output: Model files in models/ folder
+   
+   Example:
+     .\run_model.ps1 -Operation train
+
+2. EVALUATE
+   Purpose: Evaluate a specific model's performance
+   Duration: ~30 seconds
+   Output: Performance metrics and optional prediction files
+   
+   Examples:
+     .\run_model.ps1 -Operation evaluate -Model xgboost
+     .\run_model.ps1 -Operation evaluate -Model lightgbm -SavePredictions
+
+3. PREDICT
+   Purpose: Make predictions on new data
+   Duration: ~10-30 seconds
+   Output: CSV file with predictions
+   
+   Examples:
+     .\run_model.ps1 -Operation predict -Model ensemble
+     .\run_model.ps1 -Operation predict -Model xgboost -InputFile custom.csv -OutputFile output.csv
+
+4. ALL
+   Purpose: Run complete pipeline (train → evaluate → predict)
+   Duration: ~4-6 minutes
+   Output: Trained models, evaluation results, predictions
+   
+   Example:
+     .\run_model.ps1 -Operation all
+
+EXAMPLES:
+---------
+
+# Train all models
+.\run_model.ps1 -Operation train
+
+# Evaluate XGBoost model
+.\run_model.ps1 -Operation evaluate -Model xgboost
+
+# Evaluate and save predictions
+.\run_model.ps1 -Operation evaluate -Model lightgbm -SavePredictions
+
+# Make predictions with ensemble model
+.\run_model.ps1 -Operation predict -Model ensemble
+
+# Make predictions with custom input/output
+.\run_model.ps1 -Operation predict -Model xgboost -InputFile mydata.csv -OutputFile results.csv
+
+# Run complete pipeline
+.\run_model.ps1 -Operation all
+
+PRE-FLIGHT CHECKS:
+------------------
+The script checks:
+1. ✓ Python installation
+2. ✓ Data files exist
+3. ✓ Required scripts exist
+
+================================================================================
+COMMON WORKFLOWS
+================================================================================
+
+WORKFLOW 1: First Time Setup
+-----------------------------
+1. Train models:
+   .\run_model.ps1 -Operation train
+
+2. Start API:
+   .\run_api.ps1
+
+3. Test API:
+   Open browser: http://localhost:5000
+
+
+WORKFLOW 2: Quick API Testing
+------------------------------
+1. Start interactive menu:
+   .\start_project.ps1
+
+2. Select [1] Start API Server
+
+3. Open another PowerShell window and select [6] Test API Endpoints
+
+
+WORKFLOW 3: Make Predictions
+-----------------------------
+1. Use interactive menu:
+   .\start_project.ps1
+   Select [4] Make Predictions
+
+OR command line:
+   .\run_model.ps1 -Operation predict -Model ensemble
+
+
+WORKFLOW 4: Complete Pipeline
+------------------------------
+1. Run everything at once:
+   .\run_model.ps1 -Operation all
+
+2. Start API:
+   .\run_api.ps1
+
+
+WORKFLOW 5: Development/Testing
+--------------------------------
+1. Check status:
+   .\start_project.ps1
+   Select [8] View Project Status
+
+2. Train if needed:
+   Select [2] Train Models
+
+3. Test API:
+   Select [1] Start API Server
+   In another window: Select [6] Test API
+
+================================================================================
+REQUIREMENTS
+================================================================================
+
+System Requirements:
+- Windows 10/11 or Windows Server 2016+
+- PowerShell 5.1 or higher (PowerShell 7+ recommended)
+- Python 3.8 or higher
+- 4GB RAM minimum (8GB recommended)
+- 2GB free disk space
+
+Python Packages:
+- flask>=3.0.0
+- flask-cors>=4.0.0
+- pandas>=2.0.0
+- numpy>=1.24.0
+- scikit-learn>=1.3.0
+- xgboost>=2.0.0
+- lightgbm>=4.0.0
+- catboost>=1.2.0
+- joblib>=1.3.0
+
+Installation:
+  pip install -r requirements.txt
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+ISSUE: "Execution of scripts is disabled on this system"
+SOLUTION:
+  Run PowerShell as Administrator and execute:
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  
+  Or run with bypass:
+    powershell -ExecutionPolicy Bypass -File .\start_project.ps1
+
+ISSUE: "Python not found"
+SOLUTION:
+  1. Install Python from python.org
+  2. Make sure Python is in PATH
+  3. Restart PowerShell
+
+ISSUE: "Port already in use"
+SOLUTION:
+  1. Find what's using the port:
+     netstat -ano | findstr :5000
+  2. Kill the process or use different port:
+     .\run_api.ps1 -Port 8080
+
+ISSUE: "Model files missing"
+SOLUTION:
+  Train models first:
+    .\run_model.ps1 -Operation train
+
+ISSUE: "Module not found" errors
+SOLUTION:
+  Install dependencies:
+    pip install -r requirements.txt
+
+ISSUE: Scripts run but commands fail
+SOLUTION:
+  1. Make sure you're in the project root directory
+  2. Check Python version: python --version
+  3. Check all files exist: .\start_project.ps1 → [8] View Project Status
+
+================================================================================
+ADVANCED USAGE
+================================================================================
+
+RUNNING IN BACKGROUND:
+----------------------
+# Start API in background
+Start-Job -ScriptBlock { 
+    Set-Location "C:\path\to\project"
+    .\run_api.ps1 
+}
+
+# Check job status
+Get-Job
+
+# Stop background job
+Stop-Job -Id <job-id>
+Remove-Job -Id <job-id>
+
+
+SCHEDULING TASKS:
+-----------------
+You can use Windows Task Scheduler to run scripts automatically:
+1. Open Task Scheduler
+2. Create Basic Task
+3. Set trigger (daily, weekly, etc.)
+4. Action: Start a program
+5. Program: powershell.exe
+6. Arguments: -ExecutionPolicy Bypass -File "C:\path\to\run_model.ps1" -Operation train
+
+
+LOGGING OUTPUT:
+---------------
+# Save output to log file
+.\run_model.ps1 -Operation train | Tee-Object -FilePath "training.log"
+
+# Save API output
+.\run_api.ps1 2>&1 | Out-File -FilePath "api.log"
+
+
+AUTOMATION EXAMPLE:
+-------------------
+# Script to train models and start API
+.\run_model.ps1 -Operation train
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "Training successful, starting API..."
+    .\run_api.ps1
+}
+
+================================================================================
+SCRIPT FEATURES
+================================================================================
+
+All scripts include:
+✓ Color-coded output (success=green, error=red, info=cyan)
+✓ Pre-flight validation checks
+✓ Clear error messages with solutions
+✓ Progress indicators
+✓ Automatic dependency checking
+✓ Graceful error handling
+✓ Detailed help text
+✓ Professional formatting
+
+================================================================================
+TIPS & BEST PRACTICES
+================================================================================
+
+1. Always use the interactive menu (start_project.ps1) if you're unsure
+2. Check project status regularly: .\start_project.ps1 → [8]
+3. Train models before starting API
+4. Use -SavePredictions when evaluating to compare models
+5. Keep PowerShell window open when running API
+6. Test API endpoints after starting server
+7. Use custom ports if default (5000) is taken
+8. Check logs if something goes wrong
+
+================================================================================
+EXAMPLES FOR COMMON SCENARIOS
+================================================================================
+
+SCENARIO 1: Just downloaded the project
+----------------------------------------
+.\start_project.ps1
+Select [8] to view status
+Select [2] to train models (if needed)
+Select [1] to start API
+
+
+SCENARIO 2: Want to test a new model
+-------------------------------------
+.\run_model.ps1 -Operation train
+.\run_model.ps1 -Operation evaluate -Model xgboost -SavePredictions
+.\run_model.ps1 -Operation evaluate -Model lightgbm -SavePredictions
+.\run_model.ps1 -Operation evaluate -Model catboost -SavePredictions
+# Compare results in results/predictions/ folder
+
+
+SCENARIO 3: Production deployment
+----------------------------------
+.\run_model.ps1 -Operation train
+.\run_api.ps1 -SkipChecks
+# In production, consider using gunicorn instead
+
+
+SCENARIO 4: Making predictions on new data
+-------------------------------------------
+# Place your data in custom_data.csv
+.\run_model.ps1 -Operation predict -InputFile custom_data.csv -OutputFile my_predictions.csv
+
+================================================================================
+GETTING HELP
+================================================================================
+
+Each script has built-in help:
+  Get-Help .\run_api.ps1 -Full
+  Get-Help .\run_model.ps1 -Full
+  Get-Help .\start_project.ps1 -Full
+
+Or view examples:
+  Get-Help .\run_api.ps1 -Examples
+
+For more information, check:
+- COMPLETE_TESTING_REPORT.txt
+- API_ENDPOINTS_DOCUMENTATION.txt
+- STRUCTURE_GUIDE.txt
+
+================================================================================
+CHANGELOG
+================================================================================
+
+Version 1.0.0 (January 27, 2026)
+- Initial release
+- Created run_api.ps1
+- Created run_model.ps1
+- Created start_project.ps1
+- Added comprehensive pre-flight checks
+- Added interactive menu system
+- Added color-coded output
+- Added automatic error detection
+
+================================================================================
+AUTHORS & LICENSE
+================================================================================
+
+Created by: Flat Price Prediction AI Team
+Date: January 27, 2026
+License: MIT
+
+These scripts are part of the Flat Price Prediction AI project.
+Feel free to modify and distribute according to the MIT license.
+
+================================================================================
