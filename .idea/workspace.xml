@@ -23,7 +23,6 @@
       <change afterPath="$PROJECT_DIR$/../online practical/01.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../online practical/DT_titanic.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/visualizations/eda/02_numerical_distributions.png" beforeDir="false" afterPath="$PROJECT_DIR$/results/visualizations/eda/02_numerical_distributions.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +95,7 @@
       <workItem from="1769421501803" duration="3602000" />
       <workItem from="1769432693344" duration="6827000" />
       <workItem from="1769440192898" duration="5000" />
-      <workItem from="1769507573737" duration="367000" />
+      <workItem from="1769507573737" duration="3287000" />
     </task>
     <servers />
   </component>
