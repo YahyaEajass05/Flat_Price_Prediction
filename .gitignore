@@ -61,3 +61,6 @@ tmp_*
 
 # OS
 Thumbs.db
+
+# PowerShell scripts (local only)
+*.ps1
