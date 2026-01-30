@@ -49,10 +49,13 @@ exports.predictPrice = async (req, res, next) => {
         predictionTime: result.predictionTime,
       });
 
+      logger.error(`Prediction failed for user ${user.email}: ${result.error}`);
+
       return res.status(500).json({
         success: false,
-        message: 'Prediction failed',
+        message: 'Prediction failed. Please check your input data or try again.',
         error: result.error,
+        details: 'The AI model encountered an error. Please ensure all fields are filled correctly.',
       });
     }
 

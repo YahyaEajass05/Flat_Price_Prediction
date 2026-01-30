@@ -64,7 +64,3 @@ Thumbs.db
 
 # PowerShell scripts (local only)
 *.ps1
-
-# Frontend - removed from project
-frontend/
-

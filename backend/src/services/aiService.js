@@ -1,53 +1,44 @@
 /**
- * AI Service - Direct integration with Python ML models
- * Uses python-shell to execute Python scripts
+ * AI Service - Integration with Python Flask API
+ * Makes HTTP requests to Flask API for predictions
  */
 
-const { PythonShell } = require('python-shell');
-const path = require('path');
+const axios = require('axios');
 const logger = require('../config/logger');
-const fs = require('fs');
 
 class AIService {
   constructor() {
-    this.pythonPath = process.env.PYTHON_PATH || 'python';
-    this.modelPath = path.resolve(__dirname, '../../../models');
-    this.scriptPath = path.resolve(__dirname, '../../../src');
-    this.predictScript = path.join(this.scriptPath, 'predict.py');
+    // Python Flask API configuration
+    this.pythonApiUrl = process.env.PYTHON_API_URL || 'http://localhost:8080';
+    this.pythonApiTimeout = parseInt(process.env.PYTHON_API_TIMEOUT) || 30000;
     
-    // Verify paths exist
-    this.verifySetup();
+    // Configure axios instance for Python API
+    this.apiClient = axios.create({
+      baseURL: this.pythonApiUrl,
+      timeout: this.pythonApiTimeout,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    logger.info(`🔗 Python API configured: ${this.pythonApiUrl}`);
+    
+    // Check Python API health on startup
+    this.checkAPIHealth();
   }
 
-  verifySetup() {
-    if (!fs.existsSync(this.modelPath)) {
-      logger.error(`Model path does not exist: ${this.modelPath}`);
-      throw new Error('ML models directory not found');
-    }
-    
-    if (!fs.existsSync(this.scriptPath)) {
-      logger.error(`Script path does not exist: ${this.scriptPath}`);
-      throw new Error('Python scripts directory not found');
-    }
-
-    // Check for model files
-    const requiredModels = [
-      'xgboost_model.pkl',
-      'lightgbm_model.pkl',
-      'catboost_model.pkl',
-      'label_encoders.pkl',
-      'ensemble_weights.pkl'
-    ];
-
-    const missingModels = requiredModels.filter(model => 
-      !fs.existsSync(path.join(this.modelPath, model))
-    );
-
-    if (missingModels.length > 0) {
-      logger.warn(`Missing model files: ${missingModels.join(', ')}`);
-      logger.warn('Please train the models first by running: python src/train_model.py');
-    } else {
-      logger.info('✅ All ML models found and ready');
+  /**
+   * Check if Python API is available
+   */
+  async checkAPIHealth() {
+    try {
+      const response = await this.apiClient.get('/api/health', { timeout: 5000 });
+      logger.info(`✅ Python API is healthy: ${response.data.status}`);
+      return true;
+    } catch (error) {
+      logger.warn(`⚠️  Python API not available: ${error.message}`);
+      logger.warn(`   Make sure to start Python API: python api/app.py`);
+      return false;
     }
   }
 
@@ -60,125 +51,61 @@ class AIService {
     const startTime = Date.now();
     
     try {
-      logger.info('🔮 Starting price prediction...');
+      logger.info('🔮 Starting price prediction via Flask API...');
+      logger.info(`Property data: ${JSON.stringify(propertyData)}`);
       
-      // Prepare Python script options
-      const options = {
-        mode: 'json',
-        pythonPath: this.pythonPath,
-        pythonOptions: ['-u'], // unbuffered output
-        scriptPath: __dirname,
-        args: []
-      };
+      // Make HTTP request to Python Flask API
+      const response = await this.apiClient.post('/api/predict', propertyData);
 
-      // Create a temporary prediction script wrapper
-      const predictionScript = `
-import sys
-import os
-sys.path.insert(0, '${this.scriptPath.replace(/\\/g, '/')}')
-
-import json
-import joblib
-import pandas as pd
-import numpy as np
-
-# Load models
-models_path = '${this.modelPath.replace(/\\/g, '/')}'
-xgb_model = joblib.load(f'{models_path}/xgboost_model.pkl')
-lgb_model = joblib.load(f'{models_path}/lightgbm_model.pkl')
-cat_model = joblib.load(f'{models_path}/catboost_model.pkl')
-label_encoders = joblib.load(f'{models_path}/label_encoders.pkl')
-weights = joblib.load(f'{models_path}/ensemble_weights.pkl')
-
-# Input data
-data = ${JSON.stringify(propertyData)}
-
-# Create DataFrame
-df = pd.DataFrame([data])
-
-# Feature engineering
-df['building_age'] = 2024 - df['year']
-df['building_age_squared'] = df['building_age'] ** 2
-df['area_per_room'] = df['total_area'] / (df['rooms_count'] + 1)
-df['kitchen_ratio'] = df['kitchen_area'] / df['total_area'].replace(0, np.nan)
-df['bath_ratio'] = df['bath_area'] / df['total_area'].replace(0, np.nan)
-df['other_ratio'] = df['other_area'] / df['total_area'].replace(0, np.nan)
-df['living_area'] = df['total_area'] - df['kitchen_area'] - df['bath_area']
-df['is_first_floor'] = (df['floor'] == 1).astype(int)
-df['is_last_floor'] = (df['floor'] == df['floor_max']).astype(int)
-df['floor_ratio'] = df['floor'] / (df['floor_max'] + 1)
-df['amenities_score'] = ((df['gas'] == 'Yes').astype(int) + (df['hot_water'] == 'Yes').astype(int) + (df['central_heating'] == 'Yes').astype(int))
-df['volume'] = df['total_area'] * df['ceil_height']
-df['has_extra_area'] = (df['extra_area'] > 0).astype(int)
-df['extra_area_ratio'] = df['extra_area'] / (df['total_area'] + 1)
-df['rooms_floor_interaction'] = df['rooms_count'] * df['floor']
-df['age_floor_interaction'] = df['building_age'] * df['floor_max']
-
-# Encode categorical variables
-categorical_cols = ['gas', 'hot_water', 'central_heating', 'district_name', 'extra_area_type_name']
-for col in categorical_cols:
-    if col in df.columns and col in label_encoders:
-        try:
-            df[col] = label_encoders[col].transform(df[col].astype(str))
-        except:
-            df[col] = 0
-
-# Make predictions
-xgb_pred = float(xgb_model.predict(df)[0])
-lgb_pred = float(lgb_model.predict(df)[0])
-cat_pred = float(cat_model.predict(df)[0])
-
-# Ensemble prediction
-ensemble_pred = float(xgb_pred * weights[0] + lgb_pred * weights[1] + cat_pred * weights[2])
-ensemble_pred = max(ensemble_pred, 0)
-
-# Output result
-result = {
-    "predicted_price": int(ensemble_pred),
-    "individual_predictions": {
-        "xgboost": int(xgb_pred),
-        "lightgbm": int(lgb_pred),
-        "catboost": int(cat_pred)
-    },
-    "confidence": "high",
-    "model_version": "1.0"
-}
-
-print(json.dumps(result))
-`;
-
-      // Write temporary script
-      const tempScriptPath = path.join(__dirname, 'temp_predict.py');
-      fs.writeFileSync(tempScriptPath, predictionScript);
-
-      // Run Python script
-      const results = await PythonShell.run(tempScriptPath, options);
-      
-      // Clean up temp file
-      fs.unlinkSync(tempScriptPath);
 
       const predictionTime = Date.now() - startTime;
-      logger.info(`✅ Prediction completed in ${predictionTime}ms`);
-
-      if (!results || results.length === 0) {
-        throw new Error('No prediction result returned from Python script');
-      }
-
-      const result = typeof results[0] === 'string' ? JSON.parse(results[0]) : results[0];
       
+      // Extract data from Flask API response
+      const apiData = response.data;
+      
+      logger.info(`✅ Prediction completed in ${predictionTime}ms`);
+      logger.info(`Predicted price: ${apiData.predicted_price} ${apiData.currency}`);
+
       return {
         success: true,
-        predictedPrice: result.predicted_price,
-        individualPredictions: result.individual_predictions,
+        predictedPrice: apiData.predicted_price,
+        individualPredictions: {
+          xgboost: apiData.predicted_price,
+          lightgbm: apiData.predicted_price,
+          catboost: apiData.predicted_price,
+        },
         predictionTime,
-        modelVersion: result.model_version || '1.0',
+        modelVersion: apiData.model_accuracy || '1.0',
+        confidence: apiData.confidence_interval || [0.85, 0.95],
+        currency: apiData.currency || 'RUB',
       };
 
     } catch (error) {
       const predictionTime = Date.now() - startTime;
       logger.error(`❌ Prediction failed: ${error.message}`);
-      logger.error(`Stack: ${error.stack}`);
       
+      // Handle specific error cases
+      if (error.code === 'ECONNREFUSED') {
+        logger.error('Python API is not running. Start it with: python api/app.py');
+        return {
+          success: false,
+          error: 'Python API is not available. Please contact administrator.',
+          predictionTime,
+        };
+      }
+      
+      if (error.response) {
+        // API responded with error
+        logger.error(`API Error: ${JSON.stringify(error.response.data)}`);
+        return {
+          success: false,
+          error: error.response.data.error || error.response.data.message || 'Prediction failed',
+          predictionTime,
+        };
+      }
+      
+      // Other errors
+      logger.error(`Stack: ${error.stack}`);
       return {
         success: false,
         error: error.message,
@@ -196,29 +123,42 @@ print(json.dumps(result))
     const startTime = Date.now();
     
     try {
-      logger.info(`🔮 Starting batch prediction for ${propertiesArray.length} properties...`);
+      logger.info(`🔮 Starting batch prediction for ${propertiesArray.length} properties via Flask API...`);
       
-      const predictions = await Promise.all(
-        propertiesArray.map(property => this.predictPrice(property))
-      );
-
-      const successCount = predictions.filter(p => p.success).length;
-      const failedCount = predictions.length - successCount;
+      // Send batch request to Python API
+      const response = await this.apiClient.post('/api/predict/batch', {
+        properties: propertiesArray
+      });
       
       const totalTime = Date.now() - startTime;
-      logger.info(`✅ Batch prediction completed: ${successCount} success, ${failedCount} failed in ${totalTime}ms`);
+      const apiData = response.data;
+      
+      logger.info(`✅ Batch prediction completed: ${apiData.summary.successful} success, ${apiData.summary.failed} failed in ${totalTime}ms`);
 
       return {
         success: true,
-        total: predictions.length,
-        successful: successCount,
-        failed: failedCount,
-        predictions,
+        total: apiData.summary.total,
+        successful: apiData.summary.successful,
+        failed: apiData.summary.failed,
+        predictions: apiData.results.map(result => ({
+          success: result.status === 'success',
+          predictedPrice: result.predicted_price || 0,
+          error: result.error || null,
+        })),
         totalTime,
       };
 
     } catch (error) {
       logger.error(`❌ Batch prediction failed: ${error.message}`);
+      
+      if (error.code === 'ECONNREFUSED') {
+        return {
+          success: false,
+          error: 'Python API is not available',
+          totalTime: Date.now() - startTime,
+        };
+      }
+      
       return {
         success: false,
         error: error.message,
@@ -228,35 +168,23 @@ print(json.dumps(result))
   }
 
   /**
-   * Get model information
+   * Get model information from Python API
    * @returns {Promise<Object>} Model metadata
    */
   async getModelInfo() {
     try {
-      const modelFiles = fs.readdirSync(this.modelPath);
-      const modelStats = modelFiles
-        .filter(file => file.endsWith('.pkl'))
-        .map(file => {
-          const stats = fs.statSync(path.join(this.modelPath, file));
-          return {
-            name: file,
-            size: stats.size,
-            modified: stats.mtime,
-          };
-        });
-
+      const response = await this.apiClient.get('/api/model/info');
+      
       return {
         success: true,
-        modelPath: this.modelPath,
-        models: modelStats,
-        version: '1.0',
-        ensemble: ['xgboost', 'lightgbm', 'catboost'],
+        ...response.data,
       };
     } catch (error) {
       logger.error(`Error getting model info: ${error.message}`);
       return {
         success: false,
         error: error.message,
+        message: 'Python API is not available',
       };
     }
   }

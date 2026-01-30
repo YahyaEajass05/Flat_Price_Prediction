@@ -37,6 +37,14 @@ const userSchema = new mongoose.Schema({
   },
   lastLogin: Date,
   passwordChangedAt: Date,
+  predictionCount: {
+    type: Number,
+    default: 0,
+  },
+  predictionLimit: {
+    type: Number,
+    default: 100, // Default limit for regular users
+  },
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -54,6 +62,18 @@ userSchema.pre('save', async function(next) {
 // Method to compare passwords
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Method to check if user can make predictions
+userSchema.methods.canMakePrediction = function() {
+  if (this.role === 'admin') return true;
+  return this.predictionCount < this.predictionLimit;
+};
+
+// Method to get remaining predictions
+userSchema.methods.getRemainingPredictions = function() {
+  if (this.role === 'admin') return 'unlimited';
+  return Math.max(0, this.predictionLimit - this.predictionCount);
 };
 
 module.exports = mongoose.model('User', userSchema);
