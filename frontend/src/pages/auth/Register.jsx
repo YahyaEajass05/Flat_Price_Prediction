@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { UserPlus, Mail, Lock, User, Eye, EyeOff } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { authAPI } from '../../services/api'
+import { useAuthStore } from '../../store/authStore'
 import Input from '../../components/ui/Input'
 import Button from '../../components/ui/Button'
 import Alert from '../../components/ui/Alert'
@@ -43,6 +44,9 @@ export default function Register() {
   const passwordStrength = getPasswordStrength(password)
 
   const onSubmit = async (data) => {
+    // Prevent double submission
+    if (loading) return
+    
     setLoading(true)
     setApiError('')
     
@@ -53,28 +57,25 @@ export default function Register() {
         password: data.password,
       })
       
-      // Backend returns: { success, message, data: { user, token, refreshToken } }
-      const { token, user, refreshToken } = response.data.data
+      console.log('Registration successful:', response.data)
       
-      // Auto-login after registration
-      const { setAuth } = useAuthStore.getState()
-      setAuth(user, token)
+      // Show success message
+      toast.success('Account created successfully! Redirecting to login...')
       
-      // Store refresh token if needed
-      if (refreshToken) {
-        localStorage.setItem('refreshToken', refreshToken)
-      }
-      
-      toast.success('Account created successfully! Welcome!')
-      setTimeout(() => {
-        navigate('/dashboard')
-      }, 500)
+      // Redirect to login page immediately
+      navigate('/login', { 
+        state: { 
+          email: data.email,
+          message: 'Registration successful! You can now login with your credentials.',
+          fromRegistration: true
+        },
+        replace: true
+      })
     } catch (error) {
       console.error('Registration error:', error)
       const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.'
       setApiError(errorMessage)
       toast.error(errorMessage)
-    } finally {
       setLoading(false)
     }
   }

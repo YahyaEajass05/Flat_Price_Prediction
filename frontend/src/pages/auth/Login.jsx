@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { LogIn, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { LogIn, Mail, Lock, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { authAPI } from '../../services/api'
 import { useAuthStore } from '../../store/authStore'
@@ -11,16 +11,40 @@ import Alert from '../../components/ui/Alert'
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { setAuth } = useAuthStore()
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [apiError, setApiError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+  
+  // Get email and message from navigation state (from registration)
+  const registrationEmail = location.state?.email
+  const registrationMessage = location.state?.message
   
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+    setValue,
+  } = useForm({
+    defaultValues: {
+      email: registrationEmail || '',
+    }
+  })
+
+  // Show success message from registration
+  useEffect(() => {
+    if (registrationMessage) {
+      setSuccessMessage(registrationMessage)
+      // Only show toast if coming from registration
+      if (location.state?.fromRegistration) {
+        toast.success(registrationMessage)
+      }
+      // Clear navigation state to prevent showing on refresh
+      window.history.replaceState({}, document.title)
+    }
+  }, [registrationMessage, location.state])
 
   const onSubmit = async (data) => {
     setLoading(true)
@@ -67,6 +91,19 @@ export default function Login() {
 
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+          {/* Success Alert from Registration */}
+          {successMessage && (
+            <Alert 
+              variant="success" 
+              title="Registration Successful!"
+              icon={CheckCircle}
+              onClose={() => setSuccessMessage('')}
+              className="mb-6"
+            >
+              {successMessage}
+            </Alert>
+          )}
+
           {/* API Error Alert */}
           {apiError && (
             <Alert 
