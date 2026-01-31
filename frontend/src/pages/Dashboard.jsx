@@ -29,15 +29,24 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       setRefreshing(true)
+      
+      // Fetch predictions and stats
       const [predictionsRes, statsRes] = await Promise.all([
         predictionsAPI.getHistory({ limit: 5 }),
-        user.role === 'admin' ? adminAPI.getStats() : Promise.resolve({ data: {} }),
+        predictionsAPI.getStats(),
       ])
       
-      setRecentPredictions(predictionsRes.data.predictions || [])
-      setStats(statsRes.data)
+      console.log('Predictions Response:', predictionsRes.data)
+      console.log('Stats Response:', statsRes.data)
+      
+      // The API returns 'data' array, not 'predictions'
+      setRecentPredictions(predictionsRes.data.data || [])
+      setStats(statsRes.data.data || {})
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
+      // Set empty defaults on error
+      setRecentPredictions([])
+      setStats({})
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -53,52 +62,34 @@ export default function Dashboard() {
 
   if (loading) return <Loading text="Loading dashboard..." />
 
-  const statCards = user.role === 'admin' ? [
-    {
-      title: 'Total Users',
-      value: stats?.totalUsers || 0,
-      icon: Activity,
-      color: 'blue',
-      change: '+12%',
-      changeType: 'increase',
-    },
+  const statCards = [
     {
       title: 'Total Predictions',
-      value: stats?.totalPredictions || 0,
-      icon: TrendingUp,
-      color: 'green',
-      change: '+23%',
-      changeType: 'increase',
-    },
-    {
-      title: 'Avg Prediction',
-      value: formatCurrency(stats?.avgPrediction || 0),
-      icon: DollarSign,
-      color: 'purple',
-      change: '+5%',
-      changeType: 'increase',
-    },
-    {
-      title: 'Active Today',
-      value: stats?.activeToday || 0,
-      icon: Activity,
-      color: 'orange',
-      subtitle: 'Active users today',
-    },
-  ] : [
-    {
-      title: 'My Predictions',
-      value: stats?.myPredictions || recentPredictions.length,
+      value: stats?.total || 0,
       icon: History,
       color: 'blue',
-      subtitle: 'Total predictions made',
+      subtitle: 'All predictions made',
     },
     {
-      title: 'Last Prediction',
-      value: recentPredictions[0] ? formatCurrency(recentPredictions[0].predictedPrice) : 'N/A',
-      icon: DollarSign,
+      title: 'Successful',
+      value: stats?.successful || 0,
+      icon: Target,
       color: 'green',
-      subtitle: 'Most recent prediction',
+      subtitle: 'Successfully predicted',
+    },
+    {
+      title: 'Average Price',
+      value: formatCurrency(stats?.averagePrice || 0),
+      icon: DollarSign,
+      color: 'purple',
+      subtitle: 'Avg predicted price',
+    },
+    {
+      title: 'Remaining',
+      value: stats?.remaining === 'unlimited' ? '∞' : (stats?.remaining || 0),
+      icon: Zap,
+      color: 'orange',
+      subtitle: 'Predictions left',
     },
   ]
 
@@ -301,13 +292,13 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
                           <Badge variant="blue" size="sm">
-                            📐 {prediction.propertyData?.area || 'N/A'} sq ft
+                            📐 {prediction.propertyData?.total_area || prediction.propertyData?.area || 'N/A'} m²
                           </Badge>
                           <Badge variant="purple" size="sm">
-                            🏠 {prediction.propertyData?.rooms || 'N/A'} rooms
+                            🏠 {prediction.propertyData?.rooms_count || prediction.propertyData?.rooms || 'N/A'} rooms
                           </Badge>
                           <Badge variant="default" size="sm">
-                            📍 {prediction.propertyData?.district || 'N/A'}
+                            📍 {prediction.propertyData?.district_name || prediction.propertyData?.district || 'N/A'}
                           </Badge>
                           {prediction.confidence && (
                             <Tooltip content="Prediction confidence level">

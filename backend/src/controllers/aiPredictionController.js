@@ -4,6 +4,7 @@
  */
 
 const Prediction = require('../models/Prediction');
+const Property = require('../models/Property');
 const User = require('../models/User');
 const aiService = require('../services/aiService');
 const logger = require('../config/logger');
@@ -70,6 +71,39 @@ exports.predictPrice = async (req, res, next) => {
       status: 'success',
     });
 
+    // Save property data to Property collection
+    let savedProperty = null;
+    try {
+      savedProperty = await Property.create({
+        userId: user._id,
+        kitchen_area: propertyData.kitchen_area,
+        bath_area: propertyData.bath_area,
+        other_area: propertyData.other_area,
+        total_area: propertyData.total_area,
+        rooms_count: propertyData.rooms_count,
+        bath_count: propertyData.bath_count,
+        floor: propertyData.floor,
+        floor_max: propertyData.floor_max,
+        ceil_height: propertyData.ceil_height,
+        year: propertyData.year,
+        gas: propertyData.gas,
+        hot_water: propertyData.hot_water,
+        central_heating: propertyData.central_heating,
+        district_name: propertyData.district_name,
+        extra_area: propertyData.extra_area || 0,
+        extra_area_count: propertyData.extra_area_count || 0,
+        extra_area_type_name: propertyData.extra_area_type_name || 'none',
+        predicted_price: result.predictedPrice,
+        prediction_date: new Date(),
+        model_used: 'ensemble',
+        status: 'predicted',
+      });
+      logger.info(`Property saved: ${savedProperty._id}`);
+    } catch (propertyError) {
+      // Log error but don't fail the prediction
+      logger.warn(`Failed to save property: ${propertyError.message}`);
+    }
+
     // Increment user's prediction count
     if (user.role !== 'admin') {
       user.predictionCount += 1;
@@ -84,8 +118,9 @@ exports.predictPrice = async (req, res, next) => {
       message: 'Price predicted successfully',
       data: {
         predictionId: prediction._id,
+        propertyId: savedProperty ? savedProperty._id : null,
         predictedPrice: result.predictedPrice,
-        formattedPrice: `₹${result.predictedPrice.toLocaleString('en-IN')}`,
+        formattedPrice: `₽${result.predictedPrice.toLocaleString('ru-RU')}`,
         individualPredictions: result.individualPredictions,
         predictionTime: result.predictionTime,
         modelVersion: result.modelVersion,

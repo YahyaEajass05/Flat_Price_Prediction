@@ -22,17 +22,21 @@
       <change afterPath="$PROJECT_DIR$/../online practical/.vscode/settings.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../online practical/01.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../online practical/DT_titanic.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/controllers/aiPredictionController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/aiPredictionController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/predictionController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/predictionController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/middleware/validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/middleware/validation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/models/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/services/aiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/services/aiService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/start_project.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/start_project.ps1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/ProtectedRoute.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/ProtectedRoute.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ui/StatCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ui/StatCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Profile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/admin/AdminDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/AdminDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/admin/AdminPredictions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/AdminPredictions.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/admin/AdminUsers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/admin/AdminUsers.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/predictions/PredictionHistory.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/predictions/PredictionHistory.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/authStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/authStore.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +112,8 @@
       <workItem from="1769507573737" duration="3287000" />
       <workItem from="1769600668968" duration="4000" />
       <workItem from="1769699020441" duration="386000" />
-      <workItem from="1769784388949" duration="9410000" />
+      <workItem from="1769784388949" duration="9572000" />
+      <workItem from="1769835162695" duration="5064000" />
     </task>
     <servers />
   </component>

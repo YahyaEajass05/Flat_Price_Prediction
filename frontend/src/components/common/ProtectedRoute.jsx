@@ -4,20 +4,24 @@ import { useEffect, useState } from 'react'
 import Loading from './Loading'
 
 export default function ProtectedRoute({ children }) {
-  const { user, token } = useAuthStore()
+  const { user, token, isInitialized, initialize } = useAuthStore()
   const location = useLocation()
   const [isChecking, setIsChecking] = useState(true)
 
   useEffect(() => {
-    // Simulate auth check (in real app, verify token with backend)
     const checkAuth = async () => {
-      // Add your token verification logic here
-      await new Promise(resolve => setTimeout(resolve, 300))
+      // Initialize auth store if not already done
+      if (!isInitialized) {
+        initialize()
+      }
+      
+      // Small delay to prevent flash
+      await new Promise(resolve => setTimeout(resolve, 100))
       setIsChecking(false)
     }
     
     checkAuth()
-  }, [token])
+  }, [initialize, isInitialized])
 
   if (isChecking) {
     return <Loading fullScreen text="Verifying authentication..." />

@@ -84,12 +84,15 @@ export default function PredictionHistory() {
 
   const filteredPredictions = predictions.filter((pred) => {
     const searchLower = searchTerm.toLowerCase()
+    const district = pred.propertyData?.district_name || pred.propertyData?.district
+    const area = pred.propertyData?.total_area || pred.propertyData?.area
+    
     const matchesSearch = 
       pred.predictedPrice?.toString().includes(searchLower) ||
-      pred.propertyData?.district?.toLowerCase().includes(searchLower) ||
-      pred.propertyData?.area?.toString().includes(searchLower)
+      district?.toLowerCase().includes(searchLower) ||
+      area?.toString().includes(searchLower)
     
-    const matchesDistrict = filterDistrict === 'all' || pred.propertyData?.district === filterDistrict
+    const matchesDistrict = filterDistrict === 'all' || district === filterDistrict
 
     return matchesSearch && matchesDistrict
   })
@@ -102,10 +105,18 @@ export default function PredictionHistory() {
   const handleDeletePrediction = async (id) => {
     if (window.confirm('Are you sure you want to delete this prediction?')) {
       try {
-        // await predictionsAPI.delete(id)
+        // Call backend API to delete from database
+        await predictionsAPI.delete(id)
+        
+        // Update local state to remove the prediction
         setPredictions(predictions.filter(p => p._id !== id))
+        
+        // Recalculate stats
+        calculateStats()
+        
         toast.success('Prediction deleted successfully')
       } catch (error) {
+        console.error('Delete error:', error)
         toast.error('Failed to delete prediction')
       }
     }
@@ -113,7 +124,7 @@ export default function PredictionHistory() {
 
   const handleExportData = () => {
     const csvContent = predictions.map(p => 
-      `${p.predictedPrice},${p.propertyData?.area},${p.propertyData?.rooms},${p.propertyData?.district},${formatDateTime(p.createdAt)}`
+      `${p.predictedPrice},${p.propertyData?.total_area || p.propertyData?.area},${p.propertyData?.rooms_count || p.propertyData?.rooms},${p.propertyData?.district_name || p.propertyData?.district},${formatDateTime(p.createdAt)}`
     ).join('\n')
     
     const blob = new Blob([`Price,Area,Rooms,District,Date\n${csvContent}`], { type: 'text/csv' })
@@ -341,15 +352,15 @@ export default function PredictionHistory() {
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Maximize2 className="w-4 h-4" />
-                        <span>{prediction.propertyData?.area} sq ft</span>
+                        <span>{prediction.propertyData?.total_area || prediction.propertyData?.area || 'N/A'} m²</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Home className="w-4 h-4" />
-                        <span>{prediction.propertyData?.rooms} rooms</span>
+                        <span>{prediction.propertyData?.rooms_count || prediction.propertyData?.rooms || 'N/A'} rooms</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <MapPin className="w-4 h-4" />
-                        <span className="capitalize">{prediction.propertyData?.district}</span>
+                        <span className="capitalize">{prediction.propertyData?.district_name || prediction.propertyData?.district || 'N/A'}</span>
                       </div>
                     </div>
 
@@ -414,16 +425,16 @@ export default function PredictionHistory() {
                         <div>
                           <p className="text-sm text-gray-500 mb-1">Property</p>
                           <p className="text-sm font-medium text-gray-900">
-                            {prediction.propertyData?.area} sq ft
+                            {prediction.propertyData?.total_area || prediction.propertyData?.area || 'N/A'} m²
                           </p>
                           <p className="text-xs text-gray-500">
-                            {prediction.propertyData?.rooms} rooms
+                            {prediction.propertyData?.rooms_count || prediction.propertyData?.rooms || 'N/A'} rooms
                           </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500 mb-1">Location</p>
                           <Badge variant="purple" size="sm" className="capitalize">
-                            {prediction.propertyData?.district}
+                            {prediction.propertyData?.district_name || prediction.propertyData?.district || 'N/A'}
                           </Badge>
                         </div>
                         <div>
@@ -554,27 +565,59 @@ export default function PredictionHistory() {
               <h3 className="font-semibold text-gray-900 mb-3">Property Information</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Area</p>
-                  <p className="font-medium text-gray-900">{selectedPrediction.propertyData?.area} sq ft</p>
+                  <p className="text-xs text-gray-500 mb-1">Total Area</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.total_area || selectedPrediction.propertyData?.area || 'N/A'} m²
+                  </p>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-xs text-gray-500 mb-1">Rooms</p>
-                  <p className="font-medium text-gray-900">{selectedPrediction.propertyData?.rooms}</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.rooms_count || selectedPrediction.propertyData?.rooms || 'N/A'}
+                  </p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Kitchen Area</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.kitchen_area || 'N/A'} m²
+                  </p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Bathroom Area</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.bath_area || 'N/A'} m²
+                  </p>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-xs text-gray-500 mb-1">District</p>
-                  <p className="font-medium text-gray-900 capitalize">{selectedPrediction.propertyData?.district}</p>
+                  <p className="font-medium text-gray-900 capitalize">
+                    {selectedPrediction.propertyData?.district_name || selectedPrediction.propertyData?.district || 'N/A'}
+                  </p>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-xs text-gray-500 mb-1">Floor</p>
-                  <p className="font-medium text-gray-900">{selectedPrediction.propertyData?.floor}</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.floor || 'N/A'} / {selectedPrediction.propertyData?.floor_max || 'N/A'}
+                  </p>
                 </div>
-                {selectedPrediction.propertyData?.year_built && (
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-xs text-gray-500 mb-1">Year Built</p>
-                    <p className="font-medium text-gray-900">{selectedPrediction.propertyData.year_built}</p>
-                  </div>
-                )}
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Year Built</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.year || selectedPrediction.propertyData?.year_built || 'N/A'}
+                  </p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Ceiling Height</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.ceil_height || 'N/A'} m
+                  </p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Bathrooms</p>
+                  <p className="font-medium text-gray-900">
+                    {selectedPrediction.propertyData?.bath_count || 'N/A'}
+                  </p>
+                </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-xs text-gray-500 mb-1">Price/m²</p>
                   <p className="font-medium text-gray-900">
@@ -584,18 +627,23 @@ export default function PredictionHistory() {
               </div>
             </div>
 
-            {/* Amenities */}
+            {/* Utilities & Features */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Amenities</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Utilities & Features</h3>
               <div className="flex flex-wrap gap-2">
-                {selectedPrediction.propertyData?.has_parking === 'true' && (
-                  <Badge variant="blue" size="md" icon={CheckCircle}>Parking</Badge>
+                {selectedPrediction.propertyData?.gas === 'Yes' && (
+                  <Badge variant="blue" size="md" icon={CheckCircle}>Gas</Badge>
                 )}
-                {selectedPrediction.propertyData?.has_balcony === 'true' && (
-                  <Badge variant="green" size="md" icon={CheckCircle}>Balcony</Badge>
+                {selectedPrediction.propertyData?.hot_water === 'Yes' && (
+                  <Badge variant="green" size="md" icon={CheckCircle}>Hot Water</Badge>
                 )}
-                {selectedPrediction.propertyData?.has_elevator === 'true' && (
-                  <Badge variant="purple" size="md" icon={CheckCircle}>Elevator</Badge>
+                {selectedPrediction.propertyData?.central_heating === 'Yes' && (
+                  <Badge variant="purple" size="md" icon={CheckCircle}>Central Heating</Badge>
+                )}
+                {selectedPrediction.propertyData?.extra_area_type_name && (
+                  <Badge variant="orange" size="md" icon={CheckCircle}>
+                    {selectedPrediction.propertyData.extra_area_type_name} ({selectedPrediction.propertyData.extra_area || 0} m²)
+                  </Badge>
                 )}
               </div>
             </div>

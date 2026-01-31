@@ -55,20 +55,42 @@ if (process.env.NODE_ENV === 'development') {
   }));
 }
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+// Rate limiting - Different limits for different routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 login requests per windowMs
+  message: {
+    success: false,
+    message: 'Too many login attempts from this IP, please try again after 15 minutes.',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 500, // Increased from 100 to 500
   message: {
     success: false,
     message: 'Too many requests from this IP, please try again later.',
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting for admin routes in development
+    if (process.env.NODE_ENV === 'development' && req.path.startsWith('/admin')) {
+      return true;
+    }
+    return false;
+  },
 });
 
-// Apply rate limiting to all routes
-app.use('/api/', limiter);
+// Apply rate limiting to auth routes only
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+
+// Apply general rate limiting to other routes
+app.use('/api/', generalLimiter);
 
 // Welcome route
 app.get('/', (req, res) => {

@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store/authStore'
@@ -20,7 +21,12 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminPredictions from './pages/admin/AdminPredictions'
 
 function App() {
-  const { user } = useAuthStore()
+  const { user, initialize } = useAuthStore()
+
+  // Initialize auth store on app mount
+  React.useEffect(() => {
+    initialize()
+  }, [initialize])
 
   return (
     <Router>

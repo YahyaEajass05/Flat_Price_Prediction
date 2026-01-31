@@ -24,7 +24,8 @@ export default function AdminUsers() {
     setLoading(true)
     try {
       const response = await adminAPI.getAllUsers()
-      setUsers(response.data.users || [])
+      console.log('Users response:', response.data) // Debug log
+      setUsers(response.data.data || []) // Backend returns data in 'data' field
     } catch (error) {
       console.error('Error fetching users:', error)
       toast.error('Failed to load users')

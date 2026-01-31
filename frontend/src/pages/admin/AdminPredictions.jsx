@@ -23,7 +23,8 @@ export default function AdminPredictions() {
     setLoading(true)
     try {
       const response = await adminAPI.getAllPredictions({ sortBy })
-      setPredictions(response.data.predictions || [])
+      console.log('Predictions response:', response.data) // Debug log
+      setPredictions(response.data.data || []) // Backend returns data in 'data' field
     } catch (error) {
       console.error('Error fetching predictions:', error)
       toast.error('Failed to load predictions')
@@ -59,10 +60,10 @@ export default function AdminPredictions() {
       ...filteredPredictions.map(p => [
         formatDate(p.createdAt),
         p.user?.name || 'Unknown',
-        p.propertyData?.type || 'N/A',
-        p.propertyData?.area || 'N/A',
-        p.propertyData?.rooms || 'N/A',
-        p.propertyData?.district || 'N/A',
+        p.propertyData?.type || 'Apartment',
+        p.propertyData?.total_area || p.propertyData?.area || 'N/A',
+        p.propertyData?.rooms_count || p.propertyData?.rooms || 'N/A',
+        p.propertyData?.district_name || p.propertyData?.district || 'N/A',
         p.predictedPrice
       ])
     ].map(row => row.join(',')).join('\n')
@@ -81,6 +82,7 @@ export default function AdminPredictions() {
     const matchesSearch = (
       prediction.user?.name?.toLowerCase().includes(searchLower) ||
       prediction.user?.email?.toLowerCase().includes(searchLower) ||
+      prediction.propertyData?.district_name?.toLowerCase().includes(searchLower) ||
       prediction.propertyData?.district?.toLowerCase().includes(searchLower)
     )
     
@@ -300,19 +302,19 @@ export default function AdminPredictions() {
                   <Home className="w-4 h-4 text-gray-400" />
                   <span className="text-gray-600">Area:</span>
                   <span className="font-medium text-gray-900">
-                    {prediction.propertyData?.area || 'N/A'} sq ft
+                    {prediction.propertyData?.total_area || prediction.propertyData?.area || 'N/A'} m²
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm">
                   <span className="text-gray-600">Rooms:</span>
                   <span className="font-medium text-gray-900">
-                    {prediction.propertyData?.rooms || 'N/A'}
+                    {prediction.propertyData?.rooms_count || prediction.propertyData?.rooms || 'N/A'}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm">
                   <span className="text-gray-600">District:</span>
                   <span className="font-medium text-gray-900 capitalize">
-                    {prediction.propertyData?.district || 'N/A'}
+                    {prediction.propertyData?.district_name || prediction.propertyData?.district || 'N/A'}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm">
@@ -420,15 +422,21 @@ export default function AdminPredictions() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-gray-600">Area:</span>
-                    <p className="font-medium text-gray-900">{selectedPrediction.propertyData?.area} sq ft</p>
+                    <p className="font-medium text-gray-900">
+                      {selectedPrediction.propertyData?.total_area || selectedPrediction.propertyData?.area || 'N/A'} m²
+                    </p>
                   </div>
                   <div>
                     <span className="text-gray-600">Rooms:</span>
-                    <p className="font-medium text-gray-900">{selectedPrediction.propertyData?.rooms}</p>
+                    <p className="font-medium text-gray-900">
+                      {selectedPrediction.propertyData?.rooms_count || selectedPrediction.propertyData?.rooms || 'N/A'}
+                    </p>
                   </div>
                   <div>
                     <span className="text-gray-600">District:</span>
-                    <p className="font-medium text-gray-900 capitalize">{selectedPrediction.propertyData?.district}</p>
+                    <p className="font-medium text-gray-900 capitalize">
+                      {selectedPrediction.propertyData?.district_name || selectedPrediction.propertyData?.district || 'N/A'}
+                    </p>
                   </div>
                   <div>
                     <span className="text-gray-600">Floor:</span>

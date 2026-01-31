@@ -6,11 +6,12 @@ export default function StatCard({
   value, 
   change, 
   changeType = 'increase', 
-  icon: Icon,
+  icon,
   color = 'blue',
   trend,
   subtitle
 }) {
+  const Icon = icon;
   const colorClasses = {
     blue: 'from-blue-500 to-blue-600',
     green: 'from-green-500 to-green-600',

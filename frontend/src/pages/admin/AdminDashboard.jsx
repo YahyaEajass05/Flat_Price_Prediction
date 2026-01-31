@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Ca
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Progress from '../../components/ui/Progress'
+import EmptyState from '../../components/ui/EmptyState'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null)
@@ -21,6 +22,13 @@ export default function AdminDashboard() {
     fetchDashboardData()
   }, [])
 
+  // Prevent multiple rapid refreshes
+  const handleRefresh = () => {
+    if (refreshing) return // Prevent multiple simultaneous refreshes
+    setRefreshing(true)
+    fetchDashboardData()
+  }
+
   const fetchDashboardData = async () => {
     try {
       const [statsRes, usersRes, predictionsRes] = await Promise.all([
@@ -29,9 +37,13 @@ export default function AdminDashboard() {
         adminAPI.getAllPredictions({ limit: 5, sortBy: '-createdAt' })
       ])
       
-      setStats(statsRes.data)
-      setRecentUsers(usersRes.data.users || [])
-      setRecentPredictions(predictionsRes.data.predictions || [])
+      console.log('Admin Dashboard Stats:', statsRes.data)
+      console.log('Admin Dashboard Users:', usersRes.data)
+      console.log('Admin Dashboard Predictions:', predictionsRes.data)
+      
+      setStats(statsRes.data.data || statsRes.data)
+      setRecentUsers(usersRes.data.data || []) // Backend returns data in 'data' field
+      setRecentPredictions(predictionsRes.data.data || []) // Backend returns data in 'data' field
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
       toast.error('Failed to load dashboard data')
@@ -41,18 +53,13 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleRefresh = () => {
-    setRefreshing(true)
-    fetchDashboardData()
-  }
-
   if (loading) return <Loading text="Loading admin dashboard..." />
 
   const statCards = [
     {
       title: 'Total Users',
-      value: stats?.totalUsers || 0,
-      change: stats?.userGrowth || '+12%',
+      value: stats?.users?.total || 0,
+      change: '+12%',
       isIncrease: true,
       icon: Users,
       color: 'bg-gradient-to-br from-blue-500 to-blue-600',
@@ -61,8 +68,8 @@ export default function AdminDashboard() {
     },
     {
       title: 'Total Predictions',
-      value: stats?.totalPredictions || 0,
-      change: stats?.predictionGrowth || '+23%',
+      value: stats?.predictions?.total || 0,
+      change: '+23%',
       isIncrease: true,
       icon: TrendingUp,
       color: 'bg-gradient-to-br from-green-500 to-green-600',
@@ -71,8 +78,8 @@ export default function AdminDashboard() {
     },
     {
       title: 'Average Prediction',
-      value: formatCurrency(stats?.avgPrediction || 0),
-      change: stats?.avgChange || '+5%',
+      value: formatCurrency(stats?.predictions?.avgPrice || 0),
+      change: '+5%',
       isIncrease: true,
       icon: DollarSign,
       color: 'bg-gradient-to-br from-purple-500 to-purple-600',
@@ -80,10 +87,10 @@ export default function AdminDashboard() {
       iconColor: 'text-purple-600',
     },
     {
-      title: 'Active Today',
-      value: stats?.activeToday || 0,
-      change: stats?.activeChange || '-3%',
-      isIncrease: false,
+      title: 'Active Users',
+      value: stats?.users?.active || 0,
+      change: '+15%',
+      isIncrease: true,
       icon: Activity,
       color: 'bg-gradient-to-br from-orange-500 to-orange-600',
       lightBg: 'bg-orange-50',
@@ -140,12 +147,12 @@ export default function AdminDashboard() {
                     <span className="text-sm text-gray-700 font-medium">Regular Users</span>
                   </div>
                   <span className="text-sm font-bold text-gray-900">
-                    {stats?.regularUsers || 0}
+                    {(stats?.users?.total || 0) - (stats?.users?.admins || 0)}
                   </span>
                 </div>
                 <Progress 
-                  value={(stats?.regularUsers || 0)} 
-                  max={stats?.totalUsers || 1}
+                  value={(stats?.users?.total || 0) - (stats?.users?.admins || 0)} 
+                  max={stats?.users?.total || 1}
                   color="blue"
                   size="md"
                 />
@@ -158,12 +165,12 @@ export default function AdminDashboard() {
                     <span className="text-sm text-gray-700 font-medium">Admin Users</span>
                   </div>
                   <span className="text-sm font-bold text-gray-900">
-                    {stats?.adminUsers || 0}
+                    {stats?.users?.admins || 0}
                   </span>
                 </div>
                 <Progress 
-                  value={(stats?.adminUsers || 0)} 
-                  max={stats?.totalUsers || 1}
+                  value={(stats?.users?.admins || 0)} 
+                  max={stats?.users?.total || 1}
                   color="purple"
                   size="md"
                 />
@@ -181,7 +188,7 @@ export default function AdminDashboard() {
                   fill="none" 
                   stroke="#3b82f6" 
                   strokeWidth="20"
-                  strokeDasharray={`${((stats?.regularUsers || 0) / (stats?.totalUsers || 1)) * 502} 502`}
+                  strokeDasharray={`${(((stats?.users?.total || 0) - (stats?.users?.admins || 0)) / (stats?.users?.total || 1)) * 502} 502`}
                   transform="rotate(-90 100 100)"
                 />
                 <circle 
@@ -191,12 +198,12 @@ export default function AdminDashboard() {
                   fill="none" 
                   stroke="#a855f7" 
                   strokeWidth="20"
-                  strokeDasharray={`${((stats?.adminUsers || 0) / (stats?.totalUsers || 1)) * 502} 502`}
-                  strokeDashoffset={`-${((stats?.regularUsers || 0) / (stats?.totalUsers || 1)) * 502}`}
+                  strokeDasharray={`${((stats?.users?.admins || 0) / (stats?.users?.total || 1)) * 502} 502`}
+                  strokeDashoffset={`-${(((stats?.users?.total || 0) - (stats?.users?.admins || 0)) / (stats?.users?.total || 1)) * 502}`}
                   transform="rotate(-90 100 100)"
                 />
                 <text x="100" y="100" textAnchor="middle" dy=".3em" fontSize="24" fontWeight="bold" fill="#111827">
-                  {stats?.totalUsers || 0}
+                  {stats?.users?.total || 0}
                 </text>
                 <text x="100" y="120" textAnchor="middle" fontSize="12" fill="#6b7280">
                   Total Users
@@ -317,11 +324,11 @@ export default function AdminDashboard() {
                   </div>
                 ))
               ) : (
-                <EmptyState
-                  icon={Users}
-                  title="No recent users"
-                  description="New users will appear here"
-                />
+                <div className="text-center py-8">
+                  <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-600 font-medium">No recent users</p>
+                  <p className="text-sm text-gray-500 mt-1">New users will appear here</p>
+                </div>
               )}
             </div>
           </CardContent>
