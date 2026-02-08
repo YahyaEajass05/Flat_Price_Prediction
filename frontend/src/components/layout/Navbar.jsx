@@ -1,7 +1,8 @@
-import { Menu, Bell, User, LogOut, Settings, HelpCircle, Search, ChevronDown } from 'lucide-react'
+import { Menu, Bell, User, LogOut, HelpCircle, ChevronDown } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useNavigate } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
+import toast from 'react-hot-toast'
 import Badge from '../ui/Badge'
 
 export default function Navbar({ onMenuClick }) {
@@ -9,7 +10,6 @@ export default function Navbar({ onMenuClick }) {
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [notificationsOpen, setNotificationsOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
   const dropdownRef = useRef(null)
   const notificationsRef = useRef(null)
 
@@ -37,6 +37,7 @@ export default function Navbar({ onMenuClick }) {
 
   const handleLogout = () => {
     logout()
+    toast.success('Logged out successfully')
     navigate('/login')
   }
 
@@ -66,28 +67,10 @@ export default function Navbar({ onMenuClick }) {
                 PricePredictor
               </h1>
             </div>
-
-            {/* Search Bar (Desktop) */}
-            <div className="hidden md:flex items-center">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-10 pr-4 py-2 w-64 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                  onFocus={() => setSearchOpen(true)}
-                  onBlur={() => setSearchOpen(false)}
-                />
-              </div>
-            </div>
           </div>
 
           {/* Right Section */}
           <div className="flex items-center space-x-2">
-            {/* Search Button (Mobile) */}
-            <button className="md:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-              <Search className="w-5 h-5" />
-            </button>
 
             {/* Help Button */}
             <button className="hidden sm:flex p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
@@ -189,16 +172,6 @@ export default function Navbar({ onMenuClick }) {
                     >
                       <User className="w-4 h-4 mr-3 text-gray-500" />
                       My Profile
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigate('/profile')
-                        setDropdownOpen(false)
-                      }}
-                      className="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Settings className="w-4 h-4 mr-3 text-gray-500" />
-                      Settings
                     </button>
                   </div>
 
