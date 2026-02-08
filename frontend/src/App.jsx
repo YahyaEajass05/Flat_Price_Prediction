@@ -15,6 +15,7 @@ import Register from './pages/auth/Register'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
 import PredictPrice from './pages/predictions/PredictPrice'
+import BatchPredict from './pages/predictions/BatchPredict'
 import PredictionHistory from './pages/predictions/PredictionHistory'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
@@ -29,7 +30,12 @@ function App() {
   }, [initialize])
 
   return (
-    <Router>
+    <Router
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Toaster 
         position="top-right"
         toastOptions={{
@@ -66,6 +72,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/predict" element={<PredictPrice />} />
+          <Route path="/batch-predict" element={<BatchPredict />} />
           <Route path="/predictions" element={<PredictionHistory />} />
           
           {/* Admin Routes */}
