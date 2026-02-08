@@ -67,13 +67,14 @@ export const predictionsAPI = {
   getById: (id) => api.get(`/predictions/${id}`),
   delete: (id) => api.delete(`/predictions/${id}`),
   getStats: () => api.get('/predictions/stats'),
-  batchPredict: (data) => api.post('/predictions/batch', data),
+  batchPredict: (data) => api.post('/predictions/predict-batch', data),
 }
 
 // Admin API
 export const adminAPI = {
   getStats: () => api.get('/admin/stats'),
   getAllUsers: (params) => api.get('/admin/users', { params }),
+  createUser: (data) => api.post('/admin/users', data),
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
   deleteUser: (id) => api.delete(`/admin/users/${id}`),
   getAllPredictions: (params) => api.get('/admin/predictions', { params }),
