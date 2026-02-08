@@ -8,6 +8,7 @@ const router = express.Router();
 const {
   getAllUsers,
   getUserById,
+  createUser,
   updateUser,
   deleteUser,
   getSystemStats,
@@ -24,6 +25,7 @@ router.use(adminOnly);
 
 // User management
 router.get('/users', paginationValidation, validate, getAllUsers);
+router.post('/users', createUser);
 router.get('/users/:id', objectIdValidation('id'), validate, getUserById);
 router.put('/users/:id', objectIdValidation('id'), validate, updateUser);
 router.delete('/users/:id', objectIdValidation('id'), validate, deleteUser);

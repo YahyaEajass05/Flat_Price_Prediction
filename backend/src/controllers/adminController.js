@@ -261,6 +261,63 @@ exports.getAllPredictions = async (req, res, next) => {
 };
 
 /**
+ * @desc    Create user
+ * @route   POST /api/admin/users
+ * @access  Private/Admin
+ */
+exports.createUser = async (req, res, next) => {
+  try {
+    const { name, email, password, role, predictionLimit } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, email, and password are required',
+      });
+    }
+
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User with this email already exists',
+      });
+    }
+
+    // Create user
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role: role || 'user',
+      predictionLimit: predictionLimit || 100,
+    });
+
+    logger.info(`Admin created new user: ${user.email} with role: ${user.role}`);
+
+    res.status(201).json({
+      success: true,
+      message: 'User created successfully',
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        predictionLimit: user.predictionLimit,
+        predictionCount: user.predictionCount,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    logger.error(`Create user error: ${error.message}`);
+    next(error);
+  }
+};
+
+/**
  * @desc    Create admin user
  * @route   POST /api/admin/create-admin
  * @access  Private/Admin
