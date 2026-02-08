@@ -13,8 +13,17 @@ export default function AdminUsers() {
   const [editForm, setEditForm] = useState({ name: '', email: '', role: '' })
   const [filterRole, setFilterRole] = useState('all')
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false)
   const [deleting, setDeleting] = useState(null)
   const [updating, setUpdating] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [createForm, setCreateForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'user',
+    predictionLimit: 100
+  })
 
   useEffect(() => {
     fetchUsers()
@@ -62,6 +71,38 @@ export default function AdminUsers() {
       toast.error(error.response?.data?.message || 'Failed to update user')
     } finally {
       setUpdating(false)
+    }
+  }
+
+  const handleCreateUser = async () => {
+    if (!createForm.name || !createForm.email || !createForm.password) {
+      toast.error('Name, email, and password are required')
+      return
+    }
+
+    if (createForm.password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+
+    setCreating(true)
+    try {
+      await adminAPI.createUser(createForm)
+      toast.success('User created successfully')
+      setShowCreateModal(false)
+      setCreateForm({
+        name: '',
+        email: '',
+        password: '',
+        role: 'user',
+        predictionLimit: 100
+      })
+      fetchUsers()
+    } catch (error) {
+      console.error('Error creating user:', error)
+      toast.error(error.response?.data?.message || 'Failed to create user')
+    } finally {
+      setCreating(false)
     }
   }
 
@@ -122,8 +163,19 @@ export default function AdminUsers() {
     <div className="animate-fade-in">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Manage Users</h1>
-        <p className="text-gray-600 mt-2">View, edit, and manage all platform users</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Manage Users</h1>
+            <p className="text-gray-600 mt-2">View, edit, and manage all platform users</p>
+          </div>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <UserPlus className="w-5 h-5" />
+            Create User
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -420,6 +472,116 @@ export default function AdminUsers() {
                   <>
                     <Check className="w-4 h-4 mr-2" />
                     Save Changes
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create User Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-slide-up">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Create New User</h2>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="label">Full Name *</label>
+                <input
+                  type="text"
+                  value={createForm.name}
+                  onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
+                  className="input"
+                  placeholder="Enter full name"
+                />
+              </div>
+
+              <div>
+                <label className="label">Email Address *</label>
+                <input
+                  type="email"
+                  value={createForm.email}
+                  onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+                  className="input"
+                  placeholder="Enter email"
+                />
+              </div>
+
+              <div>
+                <label className="label">Password *</label>
+                <input
+                  type="password"
+                  value={createForm.password}
+                  onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+                  className="input"
+                  placeholder="Enter password (min 6 characters)"
+                />
+              </div>
+
+              <div>
+                <label className="label">Role *</label>
+                <select
+                  value={createForm.role}
+                  onChange={(e) => setCreateForm({ ...createForm, role: e.target.value })}
+                  className="input"
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="label">Prediction Limit</label>
+                <input
+                  type="number"
+                  value={createForm.predictionLimit}
+                  onChange={(e) => setCreateForm({ ...createForm, predictionLimit: parseInt(e.target.value) || 100 })}
+                  className="input"
+                  placeholder="100"
+                  min="1"
+                />
+              </div>
+
+              <div className="flex items-center space-x-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <p className="text-sm text-blue-800">
+                  New user will be created with the specified role and limits
+                </p>
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="btn btn-secondary flex-1"
+                disabled={creating}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateUser}
+                disabled={creating}
+                className="btn btn-primary flex-1 flex items-center justify-center"
+              >
+                {creating ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Create User
                   </>
                 )}
               </button>
