@@ -1,0 +1,31 @@
+{
+    "best_model": "ensemble",
+    "best_metrics": {
+        "model": "ensemble",
+        "r2_score": 0.9988499316902454,
+        "rmse": 201557.5207680603,
+        "mae": 159022.9739579993,
+        "mape": 1.028449256238842,
+        "mse": 40625434178.16705,
+        "within_5_pct": 99.88,
+        "within_10_pct": 99.985,
+        "within_15_pct": 100.0,
+        "within_20_pct": 100.0,
+        "mean_error": 571.9767564327134,
+        "std_error": 201556.70919311309,
+        "max_error": 2187342.475274302,
+        "median_error": 138810.82736240327,
+        "explained_variance": 0.9988499409517678,
+        "adj_r2_score": 0.998849874181079
+    },
+    "training_date": "2026-02-08T10:47:11.311689",
+    "dataset_size": 100000,
+    "n_features": 33,
+    "test_size": 0.2,
+    "models_trained": [
+        "xgboost",
+        "lightgbm",
+        "catboost",
+        "ensemble"
+    ]
+}
