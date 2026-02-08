@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home, TrendingUp, History, User, Shield, X, BarChart3, ChevronRight, Crown, Settings } from 'lucide-react'
+import { Home, TrendingUp, History, User, Shield, X, BarChart3, ChevronRight, Crown, Layers } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { cn } from '../../utils/helpers'
 import Badge from '../ui/Badge'
@@ -10,6 +10,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Home, badge: null },
     { name: 'Predict Price', href: '/predict', icon: TrendingUp, badge: 'Hot' },
+    { name: 'Batch Prediction', href: '/batch-predict', icon: Layers, badge: 'New' },
     { name: 'Prediction History', href: '/predictions', icon: History, badge: null },
     { name: 'Profile', href: '/profile', icon: User, badge: null },
   ]
@@ -185,19 +186,8 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Bottom Section */}
         <div className="p-4 border-t border-gray-200 bg-gray-50">
-          <button 
-            onClick={() => {
-              onClose()
-              window.location.href = '/profile'
-            }}
-            className="w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
-          >
-            <Settings className="w-5 h-5 text-gray-500" />
-            <span>Settings</span>
-          </button>
-          
           {/* Version Info */}
-          <div className="mt-3 px-3">
+          <div className="px-3">
             <p className="text-xs text-gray-500">Version 1.0.0</p>
             <p className="text-xs text-gray-400">© 2026 PricePredictor</p>
           </div>
