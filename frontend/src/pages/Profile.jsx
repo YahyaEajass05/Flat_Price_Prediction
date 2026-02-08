@@ -87,16 +87,16 @@ export default function Profile() {
     <div className="max-w-5xl mx-auto animate-fade-in">
       {/* Enhanced Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Account Settings</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Account Settings</h1>
             <p className="text-gray-600">Manage your profile, security, and preferences</p>
           </div>
           <Button
             variant="outline"
             icon={LogOut}
             onClick={handleLogout}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 w-full sm:w-auto"
           >
             Logout
           </Button>
@@ -110,15 +110,15 @@ export default function Profile() {
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20"></div>
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16"></div>
         </div>
-        <div className="px-8 pb-8">
-          <div className="flex items-end gap-6 -mt-16 relative">
-            <div className="w-32 h-32 bg-gradient-to-br from-primary-600 to-blue-600 rounded-2xl flex items-center justify-center text-white text-5xl font-bold shadow-2xl border-4 border-white">
+        <div className="px-4 sm:px-8 pb-8">
+          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 -mt-16 relative">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 bg-gradient-to-br from-primary-600 to-blue-600 rounded-2xl flex items-center justify-center text-white text-4xl sm:text-5xl font-bold shadow-2xl border-4 border-white">
               {user?.name?.charAt(0).toUpperCase()}
             </div>
-            <div className="flex-1 pb-2">
-              <h2 className="text-3xl font-bold text-gray-900 mb-1">{user?.name}</h2>
-              <p className="text-gray-600 mb-3">{user?.email}</p>
-              <div className="flex items-center gap-3">
+            <div className="flex-1 pb-2 text-center sm:text-left">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{user?.name}</h2>
+              <p className="text-gray-600 mb-3 break-all">{user?.email}</p>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3">
                 <Badge variant={user?.role === 'admin' ? 'purple' : 'primary'} size="lg" icon={Shield}>
                   {user?.role?.toUpperCase()}
                 </Badge>
@@ -144,34 +144,34 @@ export default function Profile() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <Input
-            label="Full Name"
-            icon={User}
-            error={errors.name?.message}
-            placeholder="Enter your name"
-            {...register('name', {
-              required: 'Name is required',
-              minLength: {
-                value: 2,
-                message: 'Name must be at least 2 characters',
-              },
-            })}
-          />
+                <Input
+                  label="Full Name"
+                  icon={User}
+                  error={errors.name?.message}
+                  placeholder="Enter your name"
+                  {...register('name', {
+                    required: 'Name is required',
+                    minLength: {
+                      value: 2,
+                      message: 'Name must be at least 2 characters',
+                    },
+                  })}
+                />
 
-          <Input
-            label="Email"
-            type="email"
-            icon={Mail}
-            error={errors.email?.message}
-            placeholder="Enter your email"
-            {...register('email', {
-              required: 'Email is required',
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address',
-              },
-            })}
-          />
+                <Input
+                  label="Email"
+                  type="email"
+                  icon={Mail}
+                  error={errors.email?.message}
+                  placeholder="Enter your email"
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Invalid email address',
+                    },
+                  })}
+                />
 
                 <div className="pt-4">
                   <Button
@@ -195,11 +195,16 @@ export default function Profile() {
                       <span className="text-sm font-medium text-gray-700">Member Since</span>
                     </div>
                     <p className="text-lg font-bold text-gray-900">
-                      {new Date(user?.createdAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {(() => {
+                        if (!user?.createdAt) return 'Recently Joined';
+                        const date = new Date(user.createdAt);
+                        if (isNaN(date.getTime())) return 'Recently Joined';
+                        return date.toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        });
+                      })()}
                     </p>
                   </div>
                   <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
@@ -230,7 +235,7 @@ export default function Profile() {
             <CardContent className="space-y-6">
               {/* Change Password Section */}
               <div className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200">
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col md:flex-row items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -249,13 +254,14 @@ export default function Profile() {
                     variant="primary"
                     icon={Key}
                     onClick={() => setShowPasswordModal(true)}
+                    className="w-full md:w-auto"
                   >
                     Change Password
                   </Button>
                 </div>
               </div>
 
-              <Alert variant="info" className="mt-6">
+              <Alert variant="info">
                 Your password is encrypted and secure. We recommend changing it regularly.
               </Alert>
             </CardContent>
