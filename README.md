@@ -4,7 +4,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-24.6-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://reactjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248.svg)](https://www.mongodb.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 
 A comprehensive full-stack machine learning application for predicting apartment/flat prices using advanced ensemble methods. The system combines XGBoost, LightGBM, and CatBoost algorithms to deliver accurate price predictions with a modern web interface.
 
@@ -23,9 +23,7 @@ A comprehensive full-stack machine learning application for predicting apartment
 - [API Documentation](#-api-documentation)
 - [Model Information](#-model-information)
 - [User Roles](#-user-roles)
-- [Screenshots](#-screenshots)
 - [Contributing](#-contributing)
-- [License](#-license)
 
 ---
 
@@ -766,12 +764,6 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 👨‍💻 Author
 
 **Yahya Eajass**
@@ -781,8 +773,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 ## 🙏 Acknowledgments
-
-- **Cardiff Metropolitan University** - For the academic framework
 - **Kaggle Community** - For datasets and inspiration
 - **Open Source Contributors** - For the amazing libraries and frameworks used in this project
 
@@ -794,21 +784,6 @@ For issues, questions, or suggestions:
 - 🐛 **Report Bugs:** [GitHub Issues](https://github.com/YahyaEajass05/Flat_Price_Prediction/issues)
 - 💬 **Discussions:** [GitHub Discussions](https://github.com/YahyaEajass05/Flat_Price_Prediction/discussions)
 
----
-
-## 🗺️ Roadmap
-
-### Version 2.0 (Planned)
-- [ ] Docker containerization
-- [ ] CI/CD pipeline with GitHub Actions
-- [ ] Advanced analytics dashboard
-- [ ] Email notifications
-- [ ] Multi-language support
-- [ ] Property image analysis with CNN
-- [ ] Time-series price forecasting
-- [ ] Mobile app (React Native)
-
----
 
 ## 📊 Project Stats
 
