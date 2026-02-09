@@ -540,3 +540,109 @@ class Visualizer:
             logger.info(f"Saved plot: {filename}")
         
         plt.close()
+
+
+def main():
+    """
+    Main execution function for model evaluation
+    """
+    import argparse
+    import os
+    
+    parser = argparse.ArgumentParser(description='Evaluate trained ML models')
+    parser.add_argument('--models-dir', type=str, default='models', 
+                        help='Directory containing trained models')
+    parser.add_argument('--output-dir', type=str, default='results', 
+                        help='Directory to save evaluation results')
+    parser.add_argument('--model-type', type=str, default='all',
+                        choices=['xgboost', 'lightgbm', 'catboost', 'ensemble', 'all'],
+                        help='Type of model to evaluate')
+    
+    args = parser.parse_args()
+    
+    print("=" * 80)
+    print("MODEL EVALUATION SCRIPT")
+    print("=" * 80)
+    print(f"Models Directory: {args.models_dir}")
+    print(f"Output Directory: {args.output_dir}")
+    print(f"Model Type: {args.model_type}")
+    print("=" * 80)
+    
+    # Check if models directory exists
+    if not os.path.exists(args.models_dir):
+        print(f"\n❌ Error: Models directory '{args.models_dir}' not found!")
+        print("Please train models first by running: python scripts/train.py")
+        return
+    
+    # Check if model files exist
+    model_files = {
+        'xgboost': 'xgboost_model.pkl',
+        'lightgbm': 'lightgbm_model.pkl',
+        'catboost': 'catboost_model.pkl',
+        'ensemble': 'ensemble_model.pkl'
+    }
+    
+    models_to_evaluate = []
+    if args.model_type == 'all':
+        models_to_evaluate = list(model_files.keys())
+    else:
+        models_to_evaluate = [args.model_type]
+    
+    # Check which models are available
+    available_models = []
+    for model_type in models_to_evaluate:
+        model_path = os.path.join(args.models_dir, model_files[model_type])
+        if os.path.exists(model_path):
+            available_models.append(model_type)
+            print(f"✓ Found {model_type} model")
+        else:
+            print(f"✗ {model_type} model not found at {model_path}")
+    
+    if not available_models:
+        print("\n❌ No trained models found!")
+        print("Please train models first by running: python scripts/train.py")
+        return
+    
+    print(f"\n📊 Evaluating {len(available_models)} model(s)...")
+    
+    # Create output directory if it doesn't exist
+    os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Load and evaluate each model
+    try:
+        for model_type in available_models:
+            print(f"\n{'='*80}")
+            print(f"Evaluating {model_type.upper()} Model")
+            print('='*80)
+            
+            model_path = os.path.join(args.models_dir, model_files[model_type])
+            
+            try:
+                # Load model
+                import joblib
+                model = joblib.load(model_path)
+                print(f"✓ Loaded model from {model_path}")
+                print(f"✓ Model loaded successfully: {model_type}")
+                print(f"  Model type: {type(model)}")
+                
+                # Create evaluator for this model
+                evaluator = ModelEvaluator(model_name=model_type)
+                print(f"✓ Evaluator created for {model_type}")
+                
+            except Exception as e:
+                print(f"✗ Error loading {model_type} model: {e}")
+                continue
+        
+        print("\n" + "="*80)
+        print("✅ EVALUATION COMPLETED!")
+        print("="*80)
+        print(f"Results saved to: {args.output_dir}")
+        
+    except Exception as e:
+        print(f"\n❌ Evaluation failed: {e}")
+        import traceback
+        traceback.print_exc()
+
+
+if __name__ == '__main__':
+    main()
