@@ -102,9 +102,9 @@ class DataValidator:
         is_valid = len(self.validation_issues) == 0
         
         if is_valid:
-            logger.info("✓ Data validation passed")
+            logger.info("[OK] Data validation passed")
         else:
-            logger.warning(f"⚠ Data validation found {len(self.validation_issues)} issues")
+            logger.warning(f"[WARNING] Data validation found {len(self.validation_issues)} issues")
             for issue in self.validation_issues:
                 logger.warning(f"  - {issue}")
         
@@ -202,7 +202,7 @@ class DataCleaner:
         if removed > 0:
             logger.info(f"Removed {removed} rows during cleaning ({removed/initial_rows*100:.2f}%)")
         
-        logger.info("✓ Data cleaning complete")
+        logger.info("[OK] Data cleaning complete")
         
         return self.df
     
@@ -338,7 +338,7 @@ class FeatureEngineer:
         final_features = len(self.df.columns)
         new_features = final_features - initial_features
         
-        logger.info(f"✓ Created {new_features} new features")
+        logger.info(f"[OK] Created {new_features} new features")
         
         return self.df
     
@@ -479,7 +479,7 @@ class DataPreprocessor:
         self.feature_names = list(X.columns)
         self.is_fitted = True
         
-        logger.info(f"✓ Preprocessing complete: {len(X.columns)} features ready")
+        logger.info(f"[OK] Preprocessing complete: {len(X.columns)} features ready")
         logger.info("="*70)
         
         return X, y
@@ -529,7 +529,7 @@ class DataPreprocessor:
         # Ensure exact same order as training
         X = X[self.feature_names]
         
-        logger.info(f"✓ Transformation complete: {len(X.columns)} features")
+        logger.info(f"[OK] Transformation complete: {len(X.columns)} features")
         
         return X
     
@@ -603,3 +603,110 @@ class DataPreprocessor:
         
         self.is_fitted = True
         logger.info(f"Loaded encoders from {path}")
+
+
+if __name__ == "__main__":
+    """
+    Demonstration of preprocessing pipeline
+    """
+    import sys
+    from pathlib import Path
+    
+    # Setup basic logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    
+    print("="*80)
+    print("DATA PREPROCESSING PIPELINE - DEMONSTRATION")
+    print("="*80)
+    
+    # Check if data file exists
+    from src.config import DATA_DIR
+    data_file = DATA_DIR / 'raw' / 'data.csv'
+    
+    if not data_file.exists():
+        print(f"\n[ERROR] Data file not found: {data_file}")
+        print("Please ensure the data file exists before running this script.")
+        sys.exit(1)
+    
+    print(f"\n[1] Loading data from: {data_file}")
+    loader = DataLoader(data_file)
+    df = loader.load()
+    
+    # Show basic info
+    print("\n[2] Dataset Information:")
+    info = loader.get_basic_info()
+    print(f"   - Rows: {info['n_rows']:,}")
+    print(f"   - Columns: {info['n_columns']}")
+    print(f"   - Memory Usage: {info['memory_usage']:.2f} MB")
+    print(f"   - Missing Values: {sum(info['missing_values'].values())} total")
+    
+    # Validate data
+    print("\n[3] Validating data quality...")
+    validator = DataValidator(df)
+    is_valid, issues = validator.validate_all()
+    
+    if not is_valid:
+        print(f"   Found {len(issues)} validation issues:")
+        for i, issue in enumerate(issues[:5], 1):  # Show first 5
+            print(f"   {i}. {issue}")
+        if len(issues) > 5:
+            print(f"   ... and {len(issues) - 5} more issues")
+    
+    # Clean data
+    print("\n[4] Cleaning data...")
+    cleaner = DataCleaner(df)
+    df_clean = cleaner.clean()
+    print(f"   - Rows after cleaning: {len(df_clean):,}")
+    print(f"   - Removed: {len(df) - len(df_clean):,} rows")
+    
+    # Engineer features
+    print("\n[5] Engineering features...")
+    initial_cols = len(df_clean.columns)
+    engineer = FeatureEngineer(df_clean)
+    df_engineered = engineer.engineer_all()
+    new_features = len(df_engineered.columns) - initial_cols
+    print(f"   - Created {new_features} new features")
+    print(f"   - Total features: {len(df_engineered.columns)}")
+    
+    # Full preprocessing pipeline
+    print("\n[6] Running full preprocessing pipeline...")
+    preprocessor = DataPreprocessor()
+    X, y = preprocessor.fit_transform(df, target_col='price')
+    
+    print("\n[7] Final Results:")
+    print(f"   - Features (X): {X.shape}")
+    print(f"   - Target (y): {y.shape if y is not None else 'N/A'}")
+    print(f"   - Feature names: {len(preprocessor.feature_names)}")
+    
+    # Show sample of features
+    print("\n[8] Sample of engineered features:")
+    feature_sample = preprocessor.feature_names[:10]
+    for i, feat in enumerate(feature_sample, 1):
+        print(f"   {i}. {feat}")
+    if len(preprocessor.feature_names) > 10:
+        print(f"   ... and {len(preprocessor.feature_names) - 10} more features")
+    
+    # Show data types
+    print("\n[9] Feature Data Types:")
+    dtypes = X.dtypes.value_counts()
+    for dtype, count in dtypes.items():
+        print(f"   - {dtype}: {count} features")
+    
+    # Show target statistics
+    if y is not None:
+        print("\n[10] Target Variable (price) Statistics:")
+        print(f"   - Mean: {y.mean():,.2f} RUB")
+        print(f"   - Median: {y.median():,.2f} RUB")
+        print(f"   - Std Dev: {y.std():,.2f} RUB")
+        print(f"   - Min: {y.min():,.2f} RUB")
+        print(f"   - Max: {y.max():,.2f} RUB")
+    
+    print("\n" + "="*80)
+    print("PREPROCESSING DEMONSTRATION COMPLETE")
+    print("="*80)
+    print("\nThe preprocessing pipeline is ready to use!")
+    print("You can now train models using this preprocessed data.")
+    print("\nTo train models, run: python scripts/train.py")

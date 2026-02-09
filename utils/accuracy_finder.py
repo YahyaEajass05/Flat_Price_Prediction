@@ -299,7 +299,7 @@ def main():
     
     # Load data
     print("\n📂 Loading data.csv...")
-    df = pd.read_csv('data/data.csv')
+    df = pd.read_csv('data/raw/data.csv')
     print(f"   ✓ Loaded {len(df):,} records")
     
     # Prepare features

@@ -197,7 +197,7 @@ def main():
             
             # Get best model
             best_model_name, best_metrics = comparator.get_best_model()
-            logger.info(f"\n🏆 Best Model: {best_model_name}")
+            logger.info(f"\n[BEST MODEL] {best_model_name}")
             logger.info(f"   R² Score: {best_metrics['r2_score']:.6f}")
             logger.info(f"   MAE: {best_metrics['mae']:,.0f} RUB")
         
@@ -228,12 +228,12 @@ def main():
         # ====================================================================
         # COMPLETION
         # ====================================================================
-        print_header("✅ TRAINING PIPELINE COMPLETED SUCCESSFULLY", "=", 80)
+        print_header("TRAINING PIPELINE COMPLETED SUCCESSFULLY", "=", 80)
         logger.info(f"Completed at {pd.Timestamp.now()}")
         logger.info(f"Results saved to: {RESULTS_DIR}")
         logger.info(f"Models saved to: {MODELS_DIR}")
         
-        print("\n📊 Quick Summary:")
+        print("\n[QUICK SUMMARY]")
         print(f"   • Best Model: {best_model_name}")
         print(f"   • Accuracy: {best_metrics['r2_score']*100:.2f}% (R² = {best_metrics['r2_score']:.6f})")
         print(f"   • Average Error: {best_metrics['mae']:,.0f} RUB ({best_metrics['mape']:.2f}%)")
@@ -243,7 +243,7 @@ def main():
         
     except Exception as e:
         logger.error(f"Pipeline failed with error: {str(e)}", exc_info=True)
-        print(f"\n❌ ERROR: {str(e)}")
+        print(f"\n[ERROR] {str(e)}")
         return 1
 
 

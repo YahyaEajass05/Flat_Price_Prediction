@@ -140,27 +140,27 @@ class ModelEvaluator:
         print(f"EVALUATION REPORT: {self.model_name}")
         print("="*70)
         
-        print("\n📊 PRIMARY METRICS")
+        print("\n[PRIMARY METRICS]")
         print("-" * 70)
         print(f"R² Score:              {self.metrics['r2_score']:.6f} ({self.metrics['r2_score']*100:.2f}%)")
         print(f"Adjusted R² Score:     {self.metrics['adj_r2_score']:.6f}")
         print(f"Explained Variance:    {self.metrics['explained_variance']:.6f}")
         
-        print("\n📏 ERROR METRICS")
+        print("\n[ERROR METRICS]")
         print("-" * 70)
         print(f"RMSE:                  {self.metrics['rmse']:>15,.0f} RUB")
         print(f"MAE:                   {self.metrics['mae']:>15,.0f} RUB")
         print(f"MAPE:                  {self.metrics['mape']:>15.2f} %")
         print(f"MSE:                   {self.metrics['mse']:>15,.0f}")
         
-        print("\n📈 ERROR STATISTICS")
+        print("\n[ERROR STATISTICS]")
         print("-" * 70)
         print(f"Mean Error:            {self.metrics['mean_error']:>15,.0f} RUB")
         print(f"Std Error:             {self.metrics['std_error']:>15,.0f} RUB")
         print(f"Median Error:          {self.metrics['median_error']:>15,.0f} RUB")
         print(f"Max Error:             {self.metrics['max_error']:>15,.0f} RUB")
         
-        print("\n🎯 PREDICTION ACCURACY")
+        print("\n[PREDICTION ACCURACY]")
         print("-" * 70)
         print(f"Within ±5%:            {self.metrics['within_5_pct']:>15.2f} %")
         print(f"Within ±10%:           {self.metrics['within_10_pct']:>15.2f} %")
@@ -169,7 +169,7 @@ class ModelEvaluator:
         
         # Error distribution
         error_dist = self.get_error_distribution()
-        print("\n📊 ERROR PERCENTILES")
+        print("\n[ERROR PERCENTILES]")
         print("-" * 70)
         for pct, value in error_dist['percentiles'].items():
             print(f"{pct.upper():<10} {value:>15,.0f} RUB")
@@ -246,8 +246,8 @@ class ModelComparator:
         print("-" * 100)
         
         for idx, row in df.iterrows():
-            rank = "🥇" if idx == 0 else "🥈" if idx == 1 else "🥉" if idx == 2 else f"{idx+1}."
-            print(f"{rank:<2} {row['model']:<23} {row['r2_score']:<12.6f} {row['rmse']:<15,.0f} "
+            rank = "#1" if idx == 0 else "#2" if idx == 1 else "#3" if idx == 2 else f"#{idx+1}"
+            print(f"{rank:<4} {row['model']:<23} {row['r2_score']:<12.6f} {row['rmse']:<15,.0f} "
                   f"{row['mae']:<15,.0f} {row['mape']:<10.2f}")
         
         # Accuracy table
@@ -259,15 +259,15 @@ class ModelComparator:
         print("-" * 100)
         
         for idx, row in df.iterrows():
-            rank = "🥇" if idx == 0 else "🥈" if idx == 1 else "🥉" if idx == 2 else f"{idx+1}."
-            print(f"{rank:<2} {row['model']:<23} {row['within_5_pct']:<15.2f} "
+            rank = "#1" if idx == 0 else "#2" if idx == 1 else "#3" if idx == 2 else f"#{idx+1}"
+            print(f"{rank:<4} {row['model']:<23} {row['within_5_pct']:<15.2f} "
                   f"{row['within_10_pct']:<15.2f} {row['within_15_pct']:<15.2f}")
         
         # Best model summary
         best_model, best_metrics = self.get_best_model()
         
         print("\n" + "="*100)
-        print("🏆 BEST MODEL")
+        print("[BEST MODEL]")
         print("="*100)
         print(f"\nModel: {best_model}")
         print(f"R² Score: {best_metrics['r2_score']:.6f} ({best_metrics['r2_score']*100:.2f}%)")

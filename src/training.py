@@ -94,7 +94,7 @@ class ModelTrainer:
         
         self.training_time = time.time() - start_time
         
-        logger.info(f"✓ Training complete in {self.training_time:.2f} seconds")
+        logger.info(f"[OK] Training complete in {self.training_time:.2f} seconds")
         
         return self.model
     
@@ -270,7 +270,7 @@ class EnsembleTrainer:
         # Set default weights (equal)
         self.weights = {mt: 1/len(self.model_types) for mt in self.model_types}
         
-        logger.info("✓ Ensemble training complete")
+        logger.info("[OK] Ensemble training complete")
         
         return self.models
     
@@ -461,10 +461,10 @@ class TrainingPipeline:
                 
                 self.trained_models[model_type] = trainer
                 
-                logger.info(f"✓ {model_type} training successful")
+                logger.info(f"[OK] {model_type} training successful")
                 
             except Exception as e:
-                logger.error(f"✗ {model_type} training failed: {str(e)}")
+                logger.error(f"[FAILED] {model_type} training failed: {str(e)}")
                 continue
         
         # Handle ensemble if requested
@@ -485,12 +485,12 @@ class TrainingPipeline:
                     ensemble.weights = {m: 1/len(available_models) for m in available_models}
                 
                 self.trained_models['ensemble'] = ensemble
-                logger.info("✓ Ensemble creation successful")
+                logger.info("[OK] Ensemble creation successful")
             else:
                 logger.warning("Not enough models for ensemble (need at least 2)")
         
         logger.info("="*70)
-        logger.info(f"✓ TRAINING COMPLETE: {len(self.trained_models)} models trained")
+        logger.info(f"[OK] TRAINING COMPLETE: {len(self.trained_models)} models trained")
         logger.info("="*70)
         
         return self.trained_models
@@ -514,7 +514,7 @@ class TrainingPipeline:
                 model_path = save_dir / f"{model_type}_model.pkl"
                 trainer.save(model_path)
         
-        logger.info(f"✓ All models saved to {save_dir}")
+        logger.info(f"[OK] All models saved to {save_dir}")
     
     def get_training_summary(self) -> pd.DataFrame:
         """
