@@ -1,0 +1,382 @@
+@startuml System_Overview
+!theme plain
+title Real Estate Price Prediction System - High-Level Architecture
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam component {
+    BackgroundColor<<frontend>> #E3F2FD
+    BackgroundColor<<backend>> #FFF3E0
+    BackgroundColor<<ml>> #E8F5E9
+    BackgroundColor<<database>> #FCE4EC
+    BorderColor #424242
+}
+
+actor User
+actor Admin
+
+package "Presentation Layer" {
+    component "React Frontend\n(Web Application)" as Frontend <<frontend>>
+}
+
+package "Business Logic Layer" {
+    component "Node.js/Express\n(REST API Server)" as Backend <<backend>>
+    component "Authentication\nMiddleware" as Auth
+    component "Authorization\nMiddleware" as AuthZ
+    component "Validation\nMiddleware" as Validation
+}
+
+package "Machine Learning Layer" {
+    component "Python ML Service\n(Flask API)" as MLService <<ml>>
+    component "Ensemble Model\n(XGBoost + LightGBM + CatBoost)" as Model
+    component "Feature Engineering\nPipeline" as FeatureEng
+}
+
+package "Data Layer" {
+    database "MongoDB\n(Document Store)" as DB <<database>>
+}
+
+User --> Frontend : Interact via Browser
+Admin --> Frontend : Admin Portal Access
+
+Frontend --> Backend : HTTPS/REST API
+Backend --> Auth : Verify JWT Token
+Backend --> AuthZ : Check Permissions
+Backend --> Validation : Validate Requests
+Backend --> MLService : Prediction Request (HTTP)
+Backend --> DB : CRUD Operations
+
+MLService --> FeatureEng : Preprocess Data
+FeatureEng --> Model : Engineered Features
+Model --> MLService : Predictions
+
+@enduml
+
+@startuml Three_Tier_Architecture
+!theme plain
+title Three-Tier Architecture Detail
+
+skinparam packageStyle rectangle
+skinparam backgroundColor #FFFFFF
+
+package "Tier 1: Presentation Layer" #E3F2FD {
+    [User Interface Components]
+    [State Management (Zustand)]
+    [React Router]
+    [Chart.js Visualizations]
+    [Responsive Design (Tailwind CSS)]
+}
+
+package "Tier 2: Application/Business Logic Layer" #FFF3E0 {
+    [REST API Endpoints]
+    [JWT Authentication]
+    [Role-Based Access Control]
+    [Business Logic Controllers]
+    [Error Handling]
+    [Logging (Winston)]
+}
+
+package "Tier 3: Data Layer" #FCE4EC {
+    [MongoDB Collections]
+    [Data Models (Mongoose)]
+    [Indexing Strategy]
+    [Query Optimization]
+}
+
+[User Interface Components] --> [REST API Endpoints] : HTTP/HTTPS
+[REST API Endpoints] --> [MongoDB Collections] : Database Queries
+[State Management (Zustand)] --> [User Interface Components]
+[Chart.js Visualizations] --> [User Interface Components]
+
+@enduml
+
+@startuml ML_Architecture
+!theme plain
+title Machine Learning Service Architecture
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+
+package "Data Preprocessing" #E8F5E9 {
+    component "Missing Value\nImputation" as Impute
+    component "Feature Scaling\n(StandardScaler)" as Scale
+    component "Categorical\nEncoding" as Encode
+    component "Feature Engineering\n(Derived Features)" as Engineer
+}
+
+package "Ensemble Models" #BBDEFB {
+    component "XGBoost Model\n(Weight: 0.35)" as XGB
+    component "LightGBM Model\n(Weight: 0.35)" as LGBM
+    component "CatBoost Model\n(Weight: 0.30)" as CB
+}
+
+component "Weighted\nAveraging" as Ensemble
+component "Prediction Output" as Output
+
+[Raw Property Data] --> Impute
+Impute --> Scale
+Scale --> Encode
+Encode --> Engineer
+
+Engineer --> XGB
+Engineer --> LGBM
+Engineer --> CB
+
+XGB --> Ensemble : Prediction 1
+LGBM --> Ensemble : Prediction 2
+CB --> Ensemble : Prediction 3
+
+Ensemble --> Output : Final Price Prediction
+
+note right of Ensemble
+  Final Prediction = 
+  (0.35 × XGBoost) + 
+  (0.35 × LightGBM) + 
+  (0.30 × CatBoost)
+end note
+
+@enduml
+
+@startuml API_Flow
+!theme plain
+title API Request Flow and Data Pipeline
+
+skinparam sequenceMessageAlign center
+skinparam backgroundColor #FFFFFF
+
+actor User
+participant "React\nFrontend" as Frontend
+participant "Express\nBackend" as Backend
+participant "Auth\nMiddleware" as Auth
+participant "Python ML\nService" as ML
+database "MongoDB" as DB
+
+User -> Frontend : Enter Property Details
+activate Frontend
+
+Frontend -> Backend : POST /api/predictions\n(JWT Token + Property Data)
+activate Backend
+
+Backend -> Auth : Verify JWT Token
+activate Auth
+Auth --> Backend : Token Valid
+deactivate Auth
+
+Backend -> Backend : Validate Input Data
+
+Backend -> ML : POST /predict\n(Property Features)
+activate ML
+
+ML -> ML : Preprocess Features
+ML -> ML : Run Ensemble Model
+ML --> Backend : Prediction Result
+deactivate ML
+
+Backend -> DB : Save Prediction Record
+activate DB
+DB --> Backend : Record Saved
+deactivate DB
+
+Backend --> Frontend : Prediction Response\n(Price + Confidence)
+deactivate Backend
+
+Frontend --> User : Display Results
+deactivate Frontend
+
+@enduml
+
+@startuml Database_Schema
+!theme plain
+title MongoDB Database Schema
+
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #424242
+
+entity "users" {
+    * _id : ObjectId
+    --
+    name : String
+    email : String (unique)
+    password : String (hashed)
+    role : String (user/admin)
+    createdAt : Date
+    updatedAt : Date
+}
+
+entity "predictions" {
+    * _id : ObjectId
+    --
+    userId : ObjectId (ref: users)
+    propertyData : Object
+    predictedPrice : Number
+    confidence : Number
+    modelVersion : String
+    createdAt : Date
+}
+
+entity "properties" {
+    * _id : ObjectId
+    --
+    area : Number
+    bedrooms : Number
+    bathrooms : Number
+    floors : Number
+    mainroad : Boolean
+    guestroom : Boolean
+    basement : Boolean
+    hotwaterheating : Boolean
+    airconditioning : Boolean
+    parking : Number
+    prefarea : Boolean
+    furnishingstatus : String
+}
+
+entity "admin_logs" {
+    * _id : ObjectId
+    --
+    adminId : ObjectId (ref: users)
+    action : String
+    targetUserId : ObjectId
+    timestamp : Date
+    details : Object
+}
+
+users ||--o{ predictions : "creates"
+users ||--o{ admin_logs : "performs"
+predictions ||--|| properties : "contains"
+
+@enduml
+
+@startuml Deployment_Architecture
+!theme plain
+title Deployment Architecture and Scalability
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+
+cloud "Client Devices" {
+    [Web Browser]
+    [Mobile Browser]
+}
+
+node "CDN / Static Hosting" #E3F2FD {
+    [React App\n(Static Files)]
+}
+
+node "Application Server Cluster" #FFF3E0 {
+    [Node.js Instance 1]
+    [Node.js Instance 2]
+    [Node.js Instance N]
+    component "Load Balancer" as LB
+}
+
+node "ML Service Cluster" #E8F5E9 {
+    [Python ML Service 1]
+    [Python ML Service 2]
+    [Python ML Service N]
+    component "ML Load Balancer" as MLLB
+}
+
+node "Database Cluster" #FCE4EC {
+    database "MongoDB Primary" as Primary
+    database "MongoDB Secondary 1" as Sec1
+    database "MongoDB Secondary 2" as Sec2
+}
+
+[Web Browser] --> [React App\n(Static Files)] : HTTPS
+[Mobile Browser] --> [React App\n(Static Files)] : HTTPS
+
+[React App\n(Static Files)] --> LB : API Calls (HTTPS)
+
+LB --> [Node.js Instance 1]
+LB --> [Node.js Instance 2]
+LB --> [Node.js Instance N]
+
+[Node.js Instance 1] --> MLLB : Prediction Requests
+[Node.js Instance 2] --> MLLB
+[Node.js Instance N] --> MLLB
+
+MLLB --> [Python ML Service 1]
+MLLB --> [Python ML Service 2]
+MLLB --> [Python ML Service N]
+
+[Node.js Instance 1] --> Primary : Read/Write
+[Node.js Instance 2] --> Primary
+[Node.js Instance N] --> Primary
+
+Primary --> Sec1 : Replication
+Primary --> Sec2 : Replication
+
+note right of LB
+  Handles traffic distribution
+  Enables horizontal scaling
+  Provides fault tolerance
+end note
+
+@enduml
+
+@startuml Feature_Engineering_Flow
+!theme plain
+title Feature Engineering and Preprocessing Pipeline
+
+skinparam activityBackgroundColor #FFFFFF
+skinparam activityBorderColor #424242
+
+start
+
+:Receive Raw Property Data;
+
+partition "Data Cleaning" {
+    :Identify Missing Values;
+    :Apply Imputation Strategy;
+    note right
+        Numerical: Median
+        Categorical: Mode
+    end note
+}
+
+partition "Numerical Features" {
+    :Extract Numerical Columns;
+    :Apply StandardScaler;
+    note right
+        area, bedrooms,
+        bathrooms, parking
+    end note
+}
+
+partition "Categorical Features" {
+    :Extract Categorical Columns;
+    if (High Cardinality?) then (yes)
+        :Apply Target Encoding;
+    else (no)
+        :Apply One-Hot Encoding;
+    endif
+    note right
+        furnishingstatus,
+        location features
+    end note
+}
+
+partition "Feature Engineering" {
+    :Calculate Derived Features;
+    note right
+        - Price per sq ft
+        - Property age
+        - Bedroom/bathroom ratio
+        - Amenity score
+    end note
+}
+
+partition "Feature Selection" {
+    :Combine All Features;
+    :Apply Feature Importance Filter;
+    :Select Top N Features;
+}
+
+:Output Feature Matrix;
+
+stop
+
+@enduml
+
+@enduml
