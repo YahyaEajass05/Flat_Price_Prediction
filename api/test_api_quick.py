@@ -1,8 +1,3 @@
-"""
-Quick API Test Script
-Tests all API endpoints without starting the server
-"""
-
 import sys
 from pathlib import Path
 

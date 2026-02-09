@@ -1,8 +1,3 @@
-"""
-Model evaluation module
-Handles comprehensive evaluation of trained models with multiple metrics
-"""
-
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Any, Optional

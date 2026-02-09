@@ -1,8 +1,3 @@
-"""
-Comprehensive Exploratory Data Analysis (EDA) for Flat Price Prediction
-Generates visualizations and detailed statistical analysis
-"""
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt

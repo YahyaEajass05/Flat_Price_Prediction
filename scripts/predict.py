@@ -1,8 +1,3 @@
-"""
-Prediction script using trained models
-Make predictions on new data
-"""
-
 import sys
 import argparse
 from pathlib import Path

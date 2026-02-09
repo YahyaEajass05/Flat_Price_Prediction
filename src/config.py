@@ -1,8 +1,3 @@
-"""
-Configuration file for the flat price prediction pipeline
-Contains all hyperparameters, paths, and settings
-"""
-
 import os
 from pathlib import Path
 

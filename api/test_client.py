@@ -1,8 +1,3 @@
-"""
-Test client for Flat Price Prediction API
-Demonstrates how to interact with the API endpoints
-"""
-
 import requests
 import json
 from pprint import pprint

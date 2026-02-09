@@ -1,8 +1,3 @@
-"""
-Main training script
-Complete pipeline for training flat price prediction models
-"""
-
 import sys
 import argparse
 from pathlib import Path

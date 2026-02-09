@@ -1,7 +1,3 @@
-"""
-Utility functions for logging, error handling, and common operations
-"""
-
 import logging
 import sys
 from pathlib import Path

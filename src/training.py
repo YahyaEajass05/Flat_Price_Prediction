@@ -1,8 +1,3 @@
-"""
-Model training module
-Handles training of multiple models with cross-validation
-"""
-
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any

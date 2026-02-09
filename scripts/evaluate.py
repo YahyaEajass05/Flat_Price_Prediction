@@ -1,8 +1,3 @@
-"""
-Evaluation script for trained models
-Evaluate models on test data or new data
-"""
-
 import sys
 import argparse
 from pathlib import Path

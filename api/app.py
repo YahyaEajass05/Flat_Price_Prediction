@@ -1,8 +1,3 @@
-"""
-Flask API for Flat Price Prediction
-Provides REST endpoints for price predictions using the trained ensemble model
-"""
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib

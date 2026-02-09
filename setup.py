@@ -1,7 +1,3 @@
-"""
-Setup file for Flat Price Prediction package.
-"""
-
 from setuptools import setup, find_packages
 
 # Read requirements from file
