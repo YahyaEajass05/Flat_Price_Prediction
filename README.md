@@ -644,30 +644,6 @@ Prediction Time | <200ms
 - Unlimited predictions
 - Access to admin dashboard
 
----
-
-## 🎨 Screenshots
-
-### Landing Page
-> Modern landing page with feature highlights and call-to-action
-
-### Dashboard
-> Interactive dashboard showing statistics, recent predictions, and quick actions
-
-### Single Prediction
-> User-friendly form for predicting individual property prices
-
-### Batch Prediction
-> Process multiple properties at once with progress tracking
-
-### Prediction History
-> Table view of all past predictions with filters and export options
-
-### Admin Dashboard
-> System analytics, user management, and prediction monitoring
-
----
-
 ## 🧪 Testing
 
 ### Run Backend Tests
