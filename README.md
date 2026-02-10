@@ -70,7 +70,7 @@ A comprehensive full-stack machine learning application for predicting apartment
                                   │
                                   ▼
                          ┌─────────────────┐
-                         │  FastAPI ML     │
+                         │  FlaskAPI ML     │
                          │  Service        │
                          │  (Port 8000)    │
                          └─────────────────┘
@@ -86,7 +86,7 @@ A comprehensive full-stack machine learning application for predicting apartment
 1. **User Input** → Frontend collects property details
 2. **Authentication** → Backend validates JWT token
 3. **API Request** → Backend forwards to ML service
-4. **Prediction** → FastAPI loads model and predicts price
+4. **Prediction** → Flask API loads model and predicts price
 5. **Storage** → Backend saves prediction to MongoDB
 6. **Response** → Result returned to frontend and displayed
 
@@ -126,7 +126,7 @@ A comprehensive full-stack machine learning application for predicting apartment
 - **Visualization:**
   - Matplotlib - Plotting
   - Seaborn - Statistical graphics
-- **API:** FastAPI with Uvicorn
+- **API:** Flask API with Uvicorn
 
 ### DevOps & Tools
 - **Version Control:** Git & GitHub
@@ -322,7 +322,7 @@ npm run dev  # Vite dev server with HMR
 - **Frontend:** http://localhost:3001
 - **Backend API:** http://localhost:5000
 - **ML API:** http://localhost:8000
-- **API Docs:** http://localhost:8000/docs (FastAPI auto-generated)
+- **API Docs:** http://localhost:8000/docs (Flask API auto-generated)
 
 ---
 
@@ -349,8 +349,8 @@ Flat_Price_Prediction/
 │   │   └── services/       # Business logic
 │   └── package.json
 │
-├── 📂 api/                  # FastAPI ML service
-│   ├── app.py              # FastAPI application
+├── 📂 api/                  # Flask API ML service
+│   ├── app.py              # Flask API application
 │   └── services/           # ML prediction logic
 │
 ├── 📂 scripts/              # Executable Python scripts
@@ -662,7 +662,7 @@ python -m pytest tests/
 ```
 
 ### API Testing
-The FastAPI ML service includes automatic API documentation:
+The Flask API ML service includes automatic API documentation:
 - **Swagger UI:** http://localhost:8000/docs
 - **ReDoc:** http://localhost:8000/redoc
 
